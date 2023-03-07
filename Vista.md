@@ -1,1 +1,0 @@
-Parte de la vista del proyecto.
