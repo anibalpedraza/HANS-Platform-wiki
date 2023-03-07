@@ -1,0 +1,1 @@
+El componente DebugBoardView se usará si queremos ver cómo funcionará el componente principal del problema el BoardView, es por así decirlo un componente de pruebas para el componente BoardView
