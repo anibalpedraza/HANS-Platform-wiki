@@ -1,7 +1,7 @@
 # Componente BoardView
 
 Nuestro componente BoardView está compuesto por:
-1. Un polígono que dependerá del caso el número de lados.
+1. Un polígono que dependerá del caso el número de preguntas(lados).
 2. En los vértices o extremos del polígono irán unos puntos que tendrán una respuesta asignada. Cada punto contará con su posición x e y.
 3. Un círculo que marcará el punto en el que se encuentra la media de respuestas.
 4. Un rectángulo que expresa la respuesta de otro usuario, va unida a una constante llamada denormalizePosition que nos permite obtener la posición en coordenadas x e y. Habrá tantos rectángulos como respuestas.
