@@ -1,3 +1,14 @@
+# Componente App
+
+Es el componente de la aplicación, es el que react considera principal. Este componente contendrá información como el id de la sesión, el id y el nombre del usuario.
+
+# Componente Header
+
+Este componente es la cabecera de nuestra página.
+En caso de que el usuario no haya hecho el login se mostrará un menu, el nombre de la plataforma, y un botón con el cartel Join a Session que nos mandará al login.
+En caso de que el usuario si haya realizado el login el botón Join a Session desaparece y en su lugar tenemos un botón que incluye el nombre de usuario y un icono que al pulsarlo nos da la opción de salir de la sesión. 
+
+
 # Componente BoardView
 
 Nuestro componente BoardView está compuesto por:
@@ -13,10 +24,6 @@ Nuestro componente BoardView está compuesto por:
 
 Este componente nos servirá para probar el correcto funcionamiento de nuestro anterior componente (BoardView), la parte más interesante es ver el formato en el que se recogen los valores del BoardView.
 
-# Componente Header
-
-Este componente es la cabecera de nuestra página.
-
 # Componente SessionLogin
 
 Es el componente que permite el login. Puntos a resaltar:
@@ -25,14 +32,13 @@ Es el componente que permite el login. Puntos a resaltar:
 2. El controlador nos devuelve un mensaje en formato JSON que con el que podremos sacar su status y actuar en consecuencia, en caso de que sea un error mostramos por pantalla que no se ha podido enviar la solicitud de acceso y en caso que no se haya realizado correctamente el proceso mostraremos un mensaje diciendo que no se ha podido entrar a la sesión. Por último tendremos el caso de que el código sea el 200 es decir éxito, en este caso llamaremos a la función onJoinSession.
 3. Cuando llamamos a onJoinSession devolvemos un objeto joinSession que contiene la información del id de session y el id y nombre del participante.
 
-# Componente App
 
-Es el componente de la aplicación, es el que react considera principal.
+# Componente SessionView
 
 # Componente QuestionDetails
-Es el componente que muestra la imagen de la pregunta.
-# Componente SessionView
+
+Es el componente que muestra información de la pregunta como la imagen, el número de pregunta y el tiempo restante para contestar.
 
 # Componente StatusView
 
-
+Una vez realizado el login e introducida la sesión, aparece una pequeña ventana que nos muestra la sesión a la que estamos suscritos, el estado de nuestra suscripción (entrando o dentro), un mensaje que nos dice que estamos esperando la pregunta y un botón que nos permite salir de la sesión.
