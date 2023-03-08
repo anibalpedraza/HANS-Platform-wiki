@@ -1,6 +1,6 @@
 # Componente App
 
-Es el componente de la aplicación, es el que react considera principal. Este componente contendrá información como el id de la sesión, el id y el nombre del usuario.
+Es el componente de la aplicación, es el que react considera principal. Este componente contendrá información como el id de la sesión, el id y el nombre del usuario. También redireccionará en caso de inicio o cierre de sesión.
 
 # Componente Header
 
@@ -35,6 +35,14 @@ Es el componente que permite el login. Puntos a resaltar:
 
 # Componente SessionView
 
+La primera comprobación que realiza este componente es si el status de la sesión es activo, es decir que estemos en el tiempo de contestar una pregunta.
+En caso de que no estemos en periodo de contestar mostraremos el componente StatusView.
+En caso de que si estemos en tiempo de contestar nos mostrará un panel que estará separado en dos:
+1. Parte de la pregunta: en la que encontraremos el componente QuestionDetails.
+2. Parte de la respuesta: en la que se ubicará el componente BoardView.
+
+Seguir con la parte de constantes/funciones.....
+
 # Componente QuestionDetails
 
 Es el componente que muestra información de la pregunta como la imagen, el número de pregunta y el tiempo restante para contestar.
@@ -42,3 +50,7 @@ Es el componente que muestra información de la pregunta como la imagen, el núm
 # Componente StatusView
 
 Una vez realizado el login e introducida la sesión, aparece una pequeña ventana que nos muestra la sesión a la que estamos suscritos, el estado de nuestra suscripción (entrando o dentro), un mensaje que nos dice que estamos esperando la pregunta y un botón que nos permite salir de la sesión.
+
+# Clase para el contexto JS Question
+
+# Clase para el contexto JS Session
