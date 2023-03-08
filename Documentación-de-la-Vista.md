@@ -29,4 +29,10 @@ Es el componente que permite el login. Puntos a resaltar:
 
 Es el componente de la aplicación, es el que react considera principal.
 
+# Componente QuestionDetails
+Es el componente que muestra la imagen de la pregunta.
+# Componente SessionView
+
+# Componente StatusView
+
 
