@@ -53,4 +53,19 @@ Una vez realizado el login e introducida la sesión, aparece una pequeña ventan
 
 # Clase para el contexto JS Question
 
+Nos permite tener un objeto con atributos de tipo Symbol (Variables únicas que tienen una descripción) congeladas, es decir que no se podrán modificar. Los atributos son tres todos de tipo Symbol:
+1. Undefined: cuando no tenemos pregunta definida.
+2. Loading: se ha de elegido pregunta pero no se han cargado los detalles de la misma.
+3. Loaded: se han cargado los detalles de la pregunta y éstos están disponibles.
+
 # Clase para el contexto JS Session
+
+Nos permite tener un objeto con atributos de tipo Symbol. Constará al igual que Question de tres atributos:
+1. Joining: se está obteniendo la información y suscribiéndose a los topics de MQTT.
+2. Waiting: esperando a que la pregunta sea definida y que se se carguen sus detalles.
+3. Active: los detalles están cargados y se está respondiendo a la pregunta.
+
+También tendremos una clase Session que tendrá las siguientes funcionalidades:
+1. Costructor: recibe un id de sesión, un id del participante, un parámetro al que haremos referencia en caso de estar ante un mensaje de control y otro en caso de que sea un mensaje de actualización. Primero conectamos a nuestro servidor mqtt (ws) que está en el puerto 9001. 
+* Después definimos un evento que se ejecutará cuando el cliente se conecte al servidor. El cual suscribirá al usuario a dos topics, al de control y al de actualización. 
+* Definimos otro evento en caso de que recibamos o enviemos un mensaje a través de alguno de los dos topics. Dentro de este evento una vez se reciben los datos lo primero que hacemos es tratar estos datos. Debemos comprobar que los datos lleguen en el formato correcto, en caso de que no sea contrario la ejecución del evento se cortará en ese punto. Debemos comprobar también que los datos que llegan y se envían son referentes a la sesión en la que hemos realizado el login. En caso contrario no se trata esa información y se para la ejecución del evento. Tras las anteriores comprobaciones, debemos saber de qué topic proviene el mensaje, si estamos ante un mensaje de control haremos referencia al parámetro de control pasándole un Json con los datos recibidos en la conexión. En el caso en el que sea un mensaje de actualización lo primero que haremos será saber que usuario a enviado esa información (comprobamos que los datos vengan con un quinto parámetro). Después referenciaremos al parámetro de actualización pasándole como parametros el id del participante y un json con los datos.
