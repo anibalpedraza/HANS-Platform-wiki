@@ -1,15 +1,16 @@
-# Componente App
+# Vista cliente
+## Componente App
 
 Es el componente de la aplicación, es el que react considera principal. Este componente contendrá información como el id de la sesión, el id y el nombre del usuario. También redireccionará en caso de inicio o cierre de sesión.
 
-# Componente Header
+## Componente Header
 
 Este componente es la cabecera de nuestra página.
 En caso de que el usuario no haya hecho el login se mostrará un menu, el nombre de la plataforma, y un botón con el cartel Join a Session que nos mandará al login.
 En caso de que el usuario si haya realizado el login el botón Join a Session desaparece y en su lugar tenemos un botón que incluye el nombre de usuario y un icono que al pulsarlo nos da la opción de salir de la sesión. 
 
 
-# Componente BoardView
+## Componente BoardView
 
 Nuestro componente BoardView está compuesto por:
 1. Un polígono que dependerá de la pregunta su número de vértices y lados(cada vértice referencia a una respuesta).
@@ -19,11 +20,11 @@ Nuestro componente BoardView está compuesto por:
 5. Un conjunto de flechas que mediante la posición de su inicio y final podremos saber la distancia que hay entre el punto en el que el usuario se ha posicionado y las posiciones de las respuestas (Solo visible en el modo debug).
 6. Punto o bola que expresa la posición en la que ha elegido quedarse el usuario, pudiendo obtener del elemento las posiciones x e y. Cuando el usuario decide posicionarse, éste debe hacer click en su bola roja y sin soltar el ratón posicionarse, esto hace saltar un evento mousedown que está relacionado con la constante startDrag que dentro de él contiene un evento mousemove que es el encargado de permitir mover el punto rojo por la pantalla. Este evento hace referencia a una constante llamada onUserMagnetMove del componente SessionView.
 
-# Componente DebugBoardView
+## Componente DebugBoardView
 
 Este componente nos servirá para probar el correcto funcionamiento de nuestro anterior componente (BoardView). Nos permite visualizar el formato en el que se recogen los valores del BoardView.
 
-# Componente SessionLogin
+## Componente SessionLogin
 
 Es el componente que permite el login. Puntos a resaltar:
 
@@ -32,7 +33,7 @@ Es el componente que permite el login. Puntos a resaltar:
 3. Cuando llamamos a onJoinSession devolvemos un objeto joinSession que contiene la información del id de session y el id y nombre del participante.
 
 
-# Componente SessionView
+## Componente SessionView
 
 La primera comprobación que realiza este componente es si el status de la sesión es activo, es decir que estemos en el tiempo de contestar una pregunta.
 En caso de que no estemos en periodo de contestar mostraremos el componente StatusView al que le pasaremos el id y status de la sesión, el status de la pregunta y el evento onLeaveClick.
@@ -76,22 +77,22 @@ Por último comentar las constantes onUserMagnetMove y onLeaveSessionClick.
 1. onUserMagnetMove: en caso de que el status de la sesión sea active, actualizamos el estado de la posición de la respuesta del usuario y publicamos un mensaje de actualización en el que incluimos la nueva posición.
 2. onLeaveSessionClick: que hará referencia al parámetro/función onleave() del componente.
 
-# Componente QuestionDetails
+## Componente QuestionDetails
 
 Es el componente que muestra información de la pregunta como la imagen, el número de pregunta y el tiempo restante para contestar.
 
-# Componente StatusView
+## Componente StatusView
 
 Una vez realizado el login e introducida la sesión, aparece una pequeña ventana que nos muestra la sesión a la que estamos suscritos, el estado de nuestra suscripción (entrando o dentro), un mensaje que nos dice que estamos esperando la pregunta y un botón que nos permite salir de la sesión.
 
-# Clase para el contexto JS Question
+## Clase para el contexto JS Question
 
 Nos permite tener un objeto con atributos de tipo Symbol (Variables únicas que tienen una descripción) congeladas, es decir que no se podrán modificar. Los atributos son tres todos de tipo Symbol:
 1. Undefined: cuando no tenemos pregunta definida.
 2. Loading: se ha de elegido pregunta pero no se han cargado los detalles de la misma.
 3. Loaded: se han cargado los detalles de la pregunta y éstos están disponibles.
 
-# Clase para el contexto JS Session
+## Clase para el contexto JS Session
 
 Nos permite tener un objeto con atributos de tipo Symbol. Constará al igual que Question de tres atributos:
 1. Joining: se está obteniendo la información y suscribiéndose a los topics de MQTT.
@@ -106,3 +107,7 @@ También tendremos una clase Session que tendrá las siguientes funcionalidades:
 3. Otra función llamada publishUpdate que tendrá una función idéntica a la anterior para el topic de actualización. Típicamente el json que se publica hará referencia a la ubicación de la respuesta del participante.
 4. Una última función llamada close que cierra la conexión con el servidor mqtt.
 
+# Vista administrador (Server/gui)
+## _init_
+## Participant
+## Session
