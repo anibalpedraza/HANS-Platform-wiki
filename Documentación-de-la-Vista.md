@@ -38,7 +38,44 @@ La primera comprobación que realiza este componente es si el status de la sesi�
 En caso de que no estemos en periodo de contestar mostraremos el componente StatusView al que le pasaremos el id y status de la sesión, el status de la pregunta y el evento onLeaveClick.
 En caso de que sí estemos en tiempo de contestar nos mostrará un panel que estará separado en dos:
 1. Parte de la pregunta: en la que encontraremos el componente QuestionDetails al que le pasaremos por parámetro el path de la imagen.
-2. Parte de la respuesta: en la que se ubicará el componente BoardView al que le pasamos por parámetros las respuestas (en caso de que se haya cargado la pregunta), la posición central en la que se debe ubicar el círculo de la media de las respuestas, un array con las posiciones de las respuestas de otros usuarios, la posición en la que el usuario quiere dejar su respuesta y una constante asociada a una constante .....
+2. Parte de la respuesta: en la que se ubicará el componente BoardView al que le pasamos por parámetros las respuestas (en caso de que se haya cargado la pregunta), la posición central en la que se debe ubicar el círculo de la media de las respuestas, un array con las posiciones de las respuestas de otros usuarios. Después una variable asociada al estado de la constante userMagnetPosition en la que se encontrará la posición de la respuesta del usuario, onUserMagnetMove será la función encargada de actualizar el estado de la constante función especificada en el componente BoardView. 
+
+Visto ya lo que retornaría nuestro componenete SessionView pasemos a ver más a profundidad sus atributos, funciones y eventos.
+
+Primero tenemos una variable llamada sessionRef quee usamos para almacenar un valor mutable que no provoca una nueva representación cuando se actualiza y que hace referencia a la sesión del usuario.
+Después nos encontramos con constantes las cuales están rastreadas (useState Hook), esto quiere decir que cuentan con un estado y una función de actualización de estado. Cuando algunas de las siguientes constantes actualizan su estado generan una nueva renderización y estarían asociadas a:
+1. El status de la sesión (Referencia a la constante de la clase de contexto Sesion.js).
+2. El status de la pregunta (Referencia a la constante de la clase de contexto Question.js).
+3. La posición de la respuesta del usuario (Referencia al componente BoardView).
+4. La posición de las respuestas de otros usuarios (Referencia al componente BoardView).
+5. La posición de la media de respuestas (Referencia al componente BoardView).
+
+Tras esto realizaremos efectos secundarios sobre otros componentes.
+
+1. Sobre el id de la sesión y el id del participante:
+ 
+* Realizamos una petición a nuestro servidor http para obtener un json con información sobre la sesión, en caso de recibir una respuesta http con status 200, cambiamos el estado de la sesión a waiting y comprobamos si se ha especificado ya alguna pregunta, si se ha especificado pregunta cambiamos su estado a loading y guardamos el id de ésta.
+
+* Seguimos creando una nueva sesión para el usuario para ello lo primero que haremos es crear un nuevo objeto de tipo Session que nos permite obtener un mensaje de control y otro de actualización mediante mediante su constructor. 
+Para la mensaje de control actuaremos en función de su tipo:
+** Tipo setup: comprueba que el id de la question sea nulo y actualiza el estado de la pregunta a undefined, en caso de que no se nulo actualiza el estado de la pregunta a loading y asigna el id de la pregunta que vendría en el mensaje de control.
+** Tipo start: actualiza el estado de la sesión a active
+** Tipo stop: actualiza el estado de la sesión a waiting
+
+Para el mensaje de actualización actualizamos el estado de las posiciones de las respuestas de los demás usuarios.
+
+2. Sobre la pregunta:
+
+Comprobamos que el status de pregunta sea loading, en caso de que sea así realizamos una petición a nuestro servidor http en la que recibiremos información de la pregunta en caso de obtener un código de respuesta 200.
+Si no debemos de ignorar los datos, con esta información actualizamos el estado de la pregunta. Después publicamos un mensaje de control en el que está la información "type: ready". Por último retornamos "ignore = true"
+
+3. Sobre la respuesta del usuario y las respuestas de los demás usuarios.
+Creamos una constante en a que podremos guardar los puntos de los demás usuarios. Después actualizaremos el estado de la media de respuestas de todos los usuarios, para ello haremos uso de la constante anteriormente nombrada y la posición de la respuesta del usuario. 
+
+Por último comentar las constantes onUserMagnetMove y onLeaveSessionClick.
+1. onUserMagnetMove: en caso de que el status de la sesión sea active, actualizamos el estado de la posición de la respuesta del usuario y publicamos un mensaje de actualización en el que incluimos la nueva posición.
+2. onLeaveSessionClick: que hará referencia al parámetro/función onleave() del componente.
+
 
 Seguir con la parte de constantes/funciones.....
 
