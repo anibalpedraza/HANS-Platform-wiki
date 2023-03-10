@@ -76,9 +76,6 @@ Por último comentar las constantes onUserMagnetMove y onLeaveSessionClick.
 1. onUserMagnetMove: en caso de que el status de la sesión sea active, actualizamos el estado de la posición de la respuesta del usuario y publicamos un mensaje de actualización en el que incluimos la nueva posición.
 2. onLeaveSessionClick: que hará referencia al parámetro/función onleave() del componente.
 
-
-Seguir con la parte de constantes/funciones.....
-
 # Componente QuestionDetails
 
 Es el componente que muestra información de la pregunta como la imagen, el número de pregunta y el tiempo restante para contestar.
