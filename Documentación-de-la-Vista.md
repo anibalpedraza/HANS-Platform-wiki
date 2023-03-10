@@ -108,6 +108,6 @@ También tendremos una clase Session que tendrá las siguientes funcionalidades:
 4. Una última función llamada close que cierra la conexión con el servidor mqtt.
 
 # Vista administrador (Server/gui)
-## _init_
+## Init
 ## Participant
 ## Session
