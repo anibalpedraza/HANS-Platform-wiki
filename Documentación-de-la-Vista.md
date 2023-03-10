@@ -106,8 +106,3 @@ También tendremos una clase Session que tendrá las siguientes funcionalidades:
 2. Una función llamada publishControl que recibirá por parámetro un objeto de js con la información que se quiere enviar por el topic de control. La función como su propio nombre indica se encargará de publicar en el topic de control un json con la información del objeto que hemos recibido por parámetro (información de la pregunta por ejemplo).
 3. Otra función llamada publishUpdate que tendrá una función idéntica a la anterior para el topic de actualización. Típicamente el json que se publica hará referencia a la ubicación de la respuesta del participante.
 4. Una última función llamada close que cierra la conexión con el servidor mqtt.
-
-# Vista administrador (Server/gui)
-## Init
-## Participant
-## Session
