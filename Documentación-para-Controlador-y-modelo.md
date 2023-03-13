@@ -49,8 +49,13 @@ Métodos o funciones:
 4. status (etiqueta status.setter), permite modificar el valor del atributo status de la sesión.
 5. active_question (etiqueta property), retorna el atributo question (Question).
 6. active_question (active_question.setter), permite activar las respuestas a la pregunta. Para ello lo primero que hacemos es modificar el status de todos los participantes a joined. Después comprobamos que la question se ha credo correctamente. Por último llamamos al método publish de mqtt_utils.
-7. ready_participants_count (etiqueta property)
-
+7. ready_participants_count (etiqueta property) retorna la cantidad de participantes con el status en ready.
+8. as_dict (etiqueta property), retorna el id, status, id de question y duration de la sesión.
+9. add_participant, permite añadir el participante que nos pasan por parámentro a la lista de participantes.
+10. participant_ready_handler, permite modificar el status de Participant a ready.
+11. start() 
+12. stop()
+13. participant_update_handler()
 # Servicios
 ## Api
 ## Mqtt
