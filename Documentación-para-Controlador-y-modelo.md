@@ -29,6 +29,14 @@ Métodos o funciones:
 ## Session
 * Objeto SessionCommunicator
 Contaremos con un atributo de SessionCommunicator llamado status que podrá tomar los valores disconnected, connected o subscribed.
+También contaremos con los siguientes métodos:
+1. __init__, primero modificará el status de SessionCommunicator a disconnected, después haremos referencia al método __init__ de MqttUtils y después utilizamos la función message_callback_add que permite estar suscrito a un topic y marcar como manejador de los mensajes que recibamos de ese topic a una función de nuestra clase SessionCommunicator. Haremos esto último para el topic de control y para el de updates.
+2. status (etiqueta property), retorna el valor del status de SessionCommunicator.
+3. status (etiqueta status.setter), permite modificar el valor del atributo status.
+4. connection_handler(), comprueba el parámetro de entrada connected, en caso de que éste sea falso, modifica el status a disconnected. En el caso contrario modifica el status a connected. Tras ello intenta suscribirse a la sesión con el id de ésta, si ésta se realiza correctamente cambia el estado de SessionCommunicator a suscribed.
+5. control_message_handler(), primero recoge el id del cliente, la carga del mensaje y el tipo de mensaje. Si el mensaje es de tipo ready y el participante tiene su status en ready guardará el id del cliente en on_participant_ready.
+6. updates_message_handler(), recoge también el id del client y la carga del mensaje. Guardará la información del id de cliente, el timestap (del payload) y data (del payload).
+ 
 * Objeto Session
 Dispondremos de una variable que guardará el último id que tiene asociado una sesión.
 En esta clase haremos uso de las otras clases de contexto: Question, Participant y mqtt_utils.
