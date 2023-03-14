@@ -67,6 +67,7 @@ Métodos o funciones:
 12. stop(). Dispondremos de una función callback al igual que en start(), pero en este caso cambiará el status de sesión a waiting. Publicaremos un mensaje de control con el id de la sesión, que contendrá como data 'type : stop'. Por último cierra el buffer de escritura del archivo csv y modificar su valor a None.
 13. participant_update_handler(), recibe por parámetro el propio objeto Session, el id de participante, una marca de tiempo y data (de la cual podemos extraer la posición de la respuesta del participante). Después escribiremos el archivo csv el id de participante, la marca de tiempo y la posición de la respuesta del participante en este orden. En total tendremos 7 campos separados por ',' (el formato de la posición incluye 5 parámetros, se puede consultar el formato en la url "localhost:3000/debug").
 # Servicios
+## init
 ## Api
 ## Mqtt
 # Main
