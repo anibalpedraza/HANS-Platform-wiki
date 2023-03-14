@@ -40,11 +40,11 @@ Definiremos varias señales:
 ** on_question_notified: asociada al evento setup de la pregunta.
 ** on_participant_joined: asociada a que un nuevo participante entre a la sesión.
 ** on_participants_ready_changed: asociada al número de participantes listos.
-** on_start: asociada al evento start.
-** on_stop: asociada al evento stop.
+** on_start: asociada a la función start.
+** on_stop: asociada a la función stop.
 Métodos o funciones:
 1. _init_, cómo siempre este método nos servirá para generar un objeto de tipo Session.
-2. _eq_, nos permite saber si dos sesiones corresponden a la misma sesión, se basa en el id.
+2. _eq_, nos permite saber si dos sesiones corresponden a la mism-a sesión, se basa en el id.
 3. status (etiqueta property), retorna el valor del status de la sesión (Status).
 4. status (etiqueta status.setter), permite modificar el valor del atributo status de la sesión.
 5. active_question (etiqueta property), retorna el atributo question (Question).
@@ -53,9 +53,9 @@ Métodos o funciones:
 8. as_dict (etiqueta property), retorna el id, status, id de question y duration de la sesión.
 9. add_participant, permite añadir el participante que nos pasan por parámentro a la lista de participantes.
 10. participant_ready_handler, permite modificar el status de Participant a ready.
-11. start() 
-12. stop()
-13. participant_update_handler()
+11. start(). Dentro de la función lo primero que comprobaremos será que tengamos cargada alguna pregunta, tras ello crearemos una subcarpeta en otra llamada session_log que guardará primero un archivo tipo JSON en el que guardaremos en mayor parte información de la sesión (fecha en la que se ha generado en archivo, id de la sesión, id de la question, duración de la pregunta y la lista de participantes). Por último utilizaremos la función publish de nuestro SessionCommunicator, el mensaje enviado será de control, que incluirá el id de la sesión y como data incluirá un JSON con la información 'type : start'. Para finalizar dentro de publish llamaremos a la función callback que abrirá el buffer a un archivo de tipo csv (en el que se guardará la información de las respuestas) y cambiaremos el status de la sesión a active.
+12. stop(). Dispondremos de una función callback al igual que en start(), pero en este caso cambiará el status de sesión a waiting. Publicaremos un mensaje de control con el id de la sesión, que contendrá como data 'type : stop'. Por último cierra el buffer de escritura del archivo csv y modificar su valor a None.
+13. participant_update_handler(), recibe por parámetro el propio objeto Session, el id de participante, una marca de tiempo y data (de la cual podemos extraer la posición de la respuesta del participante). Después escribiremos el archivo csv el id de participante, la marca de tiempo y la posición de la respuesta del participante en este orden. En total tendremos 7 campos separados por ',' (el formato de la posición incluye 5 parámetros, se puede consultar el formato en la url "localhost:3000/debug").
 # Servicios
 ## Api
 ## Mqtt
