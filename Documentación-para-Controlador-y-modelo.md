@@ -1,4 +1,5 @@
 # Contexto
+## __init__
 ## Mqtt_utils
 Servirá para controlar el comportamiento de un cliente del servidor MQTT.
 Métodos o funciones:
