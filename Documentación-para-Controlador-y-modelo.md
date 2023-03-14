@@ -1,5 +1,6 @@
 # Contexto
-## __init__
+## init
+Clase AppContext, crea un objeto Namespace en el que marca que los puertos para los servidores son: 9001 para MQTT y 5000 para API. Tendremos otros atributos como mqtt_broker, api_service, sessions (Array de objetos Session) y questions (Array de objetos Question). Éste último atributo recibirá nuevos objetos gracias a la función reload_question que se apoyará en la función from_folder de Question a la que le pasamos la dirección de todas las preguntas.
 ## Mqtt_utils
 Servirá para controlar el comportamiento de un cliente del servidor MQTT.
 Métodos o funciones:
