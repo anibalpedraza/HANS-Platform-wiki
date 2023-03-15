@@ -84,7 +84,7 @@ Funciones:
 * Ruta('/', defaults={'path': ''}) y ruta("/<path:path>"): asociada a la función client_handler, redirecciona a las distintas páginas de nuestra app.
 
 Por último en el constructor levantamos el servidor, declaramos un atributo llamado ctx que guarda el contexto de la app del cual podremos realizar un push.
-2. run(), emite una señal a on_start y ordenará al servidor manejar todas las solicitudes que lleguen hasta que se haga un shutsown().
+2. run(), emite una señal a on_start y ordenará al servidor manejar todas las solicitudes que lleguen hasta que se haga un shutdown().
 3. shutdown(), hace una llamada shutdown() para que el servidor deje de manejar peticiones.
 ## Mqtt
 Tendremos las siguientes funciones dentro de la misma:
