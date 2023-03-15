@@ -29,7 +29,7 @@ Métodos o funciones:
 2. as_dict(), retornará el valor de los atributos id, prompt y answers.
 3. from_folder(), nos servirá para generar un objeto Question a partir de la dirección de una carpeta en la que deberemos tener la información referente a una pregunta. Lo primero que haremos es comprobar que exista tal archivo y abrir un buffer de lectura a éste. Almacenaremos los datos en una variable suponiendo que la información que contiene el buffer se encuentra en formato JSON. Tras esto pasamos a buscar dentro de esta información la dirección de la imagen de la pregunta. Por último retornamos un objeto Question con los valores cargados del archivo y con su id asociado.
 ## Session
-* Objeto SessionCommunicator
+### Objeto SessionCommunicator
 Contaremos con un atributo de SessionCommunicator llamado status que podrá tomar los valores disconnected, connected o subscribed.
 También contaremos con los siguientes métodos:
 1. __init__, primero modificará el status de SessionCommunicator a disconnected, después haremos referencia al método __init__ de MqttUtils y después utilizamos la función message_callback_add que permite estar suscrito a un topic y marcar como manejador de los mensajes que recibamos de ese topic a una función de nuestra clase SessionCommunicator. Haremos esto último para el topic de control y para el de updates.
@@ -39,7 +39,7 @@ También contaremos con los siguientes métodos:
 5. control_message_handler(), primero recoge el id del cliente, la carga del mensaje y el tipo de mensaje. Si el mensaje es de tipo ready y el participante tiene su status en ready guardará el id del cliente en on_participant_ready.
 6. updates_message_handler(), recoge también el id del client y la carga del mensaje. Guardará la información del id de cliente, el timestap (del payload) y data (del payload).
  
-* Objeto Session
+### Objeto Session
 Dispondremos de una variable que guardará el último id que tiene asociado una sesión.
 En esta clase haremos uso de las otras clases de contexto: Question, Participant y mqtt_utils.
 Contaremos con una subclase de la sesión llamada status que podrá tomar los valores waiting o active.
