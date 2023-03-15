@@ -72,10 +72,25 @@ Métodos o funciones:
 Primero definimos dos señales la primera on_start y la segunda on_session_created.
 Funciones:
 1. _init_()(constructor), primero inicializamos un hilo, un QObject y un Flask. Definiremos URLs, según las cuales Flask activará la función asociada a esa ruta cuando se recoja una petición. También deberemos de fijar el tipo de petición (GET, POST, PUT, etc).
-* Ruta("/api/session/<int:session_id>", tipo GET)
-* Ruta(, tipo)
-* Ruta(, tipo)
-2. run(), 
-3. shutdown(),
+* Ruta("/api/session/<int:session_id>", tipo GET): llama a la función api_session_handle_get(), la cual intentará obtener la sesión asociada al id que entra por parámetro. Devuelve un JSON con la información de la sesión o un error 404.
+* Ruta("/api/session", tipo GET): llama a la función api_get_all_sessions() que devolverá la información de todas las sesiones activas.
+* Ruta("/api/session", tipo POST): asociada a la función api_create_session, genera una nueva sesión y devuelve la información de la misma.
+* Ruta("/api/session/<int:session_id>", tipo GET): asociada a la función api_edit_session, obtiene la sesión asociada al id pasado por parámetro, en caso de no existir esa session la función devuelve un error 404. Cuando los datos recibidos en la petición en formato JSON no se corresponden con la sesión devolvemos un error 400. Si los datos si que corresponden, actualizaremos el status de la session, el id de la pregunta y su duración (realizando distintas comprobaciones que pueden hacer que la función devuelva un error 400 o 404). Por último la función devuelve la información de la sesión ya actualizada en formato JSON.
+* Ruta("/api/session/<int:session_id>/participants", tipo GET): asociada a la función api_session_get_all_participants, devuelve información en formato JSON de los participantes de la sesión asociada al id que recibimos por parámetro.
+* Ruta("/api/session/<int:session_id>/participants", tipo POST): asociada a la función api_session_add_participant, primero comprueba que dentro de los datos de la petición se encuentre informción referente al user, tras ello comprueba que exista una sesión asociada al id recibido por parámetro. La última comprobación es que no exista un participante dentro de la sesión con el mismo nombre que el username que se recoge de los datos de la petición. Por último declaramos un objeto de tipo Participant, lo agregamos a la lista de participantes de la sesión y devolvemos la información del objeto Participant en formato JSON.
+* Ruta("/api/session/<int:session_id>/participants/<int:participant_id>", tipo DELETE): No implementado
+* Ruta("/api/question/<int:question_id>"): asociada a la función api_question_handle, primero comprueba que exista una pregunta asociada al id recibido por parámetro y devuelve información de dicha pregunta en formato JSON.
+* Ruta("/api/question/<int:question_id>/image"): asociada a la función api_question_image_handle, primero comprueba que exista una pregunta asociada al id recibido por parámetro y devuelve la dirección de la imagen de dicha pregunta.
+* Ruta('/', defaults={'path': ''}) y ruta("/<path:path>"): asociada a la función client_handler, redirecciona a las distintas páginas de nuestra app.
+
+Por último en el constructor levantamos el servidor, declaramos un atributo llamado ctx que guarda el contexto de la app del cual podremos realizar un push.
+2. run(), emite una señal a on_start y ordenará al servidor manejar todas las solicitudes que lleguen hasta que se haga un shutsown().
+3. shutdown(), hace una llamada shutdown() para que el servidor deje de manejar peticiones.
 ## Mqtt
+Tendremos las siguientes funciones dentro de la misma:
+1. _init_ (constructor), declara e inicializa los atributos port, thread, process, on_start y on_stop. En el caso del atributo port este se inicializa a 9001.
+2. isRunning():
+3. _monitor():
+4. start(): 
+5. stop:
 # Main
