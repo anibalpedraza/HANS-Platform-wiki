@@ -68,6 +68,11 @@ Métodos o funciones:
 13. participant_update_handler(), recibe por parámetro el propio objeto Session, el id de participante, una marca de tiempo y data (de la cual podemos extraer la posición de la respuesta del participante). Después escribiremos el archivo csv el id de participante, la marca de tiempo y la posición de la respuesta del participante en este orden. En total tendremos 7 campos separados por ',' (el formato de la posición incluye 5 parámetros, se puede consultar el formato en la url "localhost:3000/debug").
 # Servicios
 ## init
+Nos apoyaremos en la clase de contexto init (AppContext), en el broker mqtt y en servidor de API.
+Define dos funciones:
+1. start_services(): comprueba que tanto el broker de mqtt como el servidor API se pueda invocar, en cuyo caso inicializamos el atributo mqtt_broker de AppContext con un objeto broker mqtt. Después inicicaliza el broker. Luego hacemos lo mismo para el servidor API.
+2. stop_services(): en caso de que los servicios estén en funcionamiento los para. En el caso del broker mqtt llamará a su método stop, el servidor API llamará a su método shutdown.
+
 ## Api
 Primero definimos dos señales la primera on_start y la segunda on_session_created.
 Funciones:
@@ -89,8 +94,10 @@ Por último en el constructor levantamos el servidor, declaramos un atributo lla
 ## Mqtt
 Tendremos las siguientes funciones dentro de la misma:
 1. _init_ (constructor), declara e inicializa los atributos port, thread, process, on_start y on_stop. En el caso del atributo port este se inicializa a 9001.
-2. isRunning():
-3. _monitor():
-4. start(): 
-5. stop:
+2. isRunning(): devuelve el objeto process.
+3. _monitor(): recorre el atributo readline de la variable stream que se le pasa por parámetro e imprime por pantalla '[mosquitto]' + la información de la linea 
+a la que esté apuntando el iterador. Cuando acaba de iterar imprime '[mosquito]' + y el valor del atributo name de stream. Comprueba que pueda invocar al atributo on_stop y si puede la llama. 
+4. start(): Inicializa una variable en la que guardaremos la dirección de la configuración de mosquitto. Crea archivo con la dirección antes especificada y escribe la configuración de mosquitto en él. Guarda en el atributo process un subproceso. Tras la creación de éste subproceso ordena que el subproceso se ejecute en un nuevo hilo para los mensajes de salida y en otro para los mensajes de error. Si el atributo on_start es invocable lo invoca.
+5. stop(): Comprueba que el proceso haya terminado y espera a que los hilos acaben para mandar el codigo de respuesta del atributo process.
 # Main
+Está función nos permite lanzar los servidores y la interfaz de control.
