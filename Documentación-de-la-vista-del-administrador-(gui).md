@@ -31,5 +31,6 @@ Session.
 14. on_stop(), fija el texto de start_btn a 'Start' y lo habilita, cambia el índice actual a 0 y llama al método stop de duration_timer.
 15. set_session(),
 16. setupUI(), 
+
 --Acabar los dos métodos que quedan y poner herencias, imports de todas las clases y poner al lado del titulo el nombre por el que se le reconoce en imports--
 
