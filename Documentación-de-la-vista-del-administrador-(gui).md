@@ -1,5 +1,16 @@
 # Interfaz de control (Server/gui)
-## init
+## init (ServerGUI).
+Nos ayudará a desplegar la interfaz.
+Hereda de QMainWindow y se apoya de las clases SessionListItem, SessionPanelWidget de gui, init de servicios y AppContext y Session de context. Métodos/funciones:
+1. init() (constructor), llama al constructor de QMainWindow e inicializa la sesión seleccionada a none.
+2. on_services_started(), pregunta por el servicio inicializado, en caso de ser el broker, modifica el valor del status de mqtt y fija un texto que se cambiará por el antes fijado en caso de que el broker se pare. En caso de que el servicio inicializado sea api modifica el texto asociado al status de api, enlaza la señal de on_session_created del servicio api con la función on_session_created de la que hablaremos más tarde.
+3. on_add_session_btn_clicked(), permite generar una nueva sesión, cuando ésta se genera llamamos a la función on_session_created y fija la fila de la lista de sesiones.
+4. on_session_created()(etiqueta pyqtSlot(Session)), añade el item de SessionListItem a la lista de sesiones.
+5. on_session_list_item_changed(), llama a la función set_session de SessionPanelWidget y muestra el panel de la sesión.
+6. showEvent(), llama al método showEvent de la clase QMainWindow y lanza los servicios que están obligados a inicializarse antes de 100 milisegundos. 
+7. setupUI(), fija un título y le asigna un tamaño a la interfaz gui. Añade un panel central en el que irán el panel de la sesión, el cual tendrá a su vez un subpanel de lista de sesiones en el que tendremos las sesiones y un botón para crear una nueva sesión. Un click en éste botón llamará a la función on_add_session_btn_clicked. Creamos un SessionPanelWidget y lo añadimos al panel principal. Por último contamos con un panel para el status de los servicios.
+8. shutdown(), que parará los servicios haciendo uso de la función stop_services de la clase init de services.
+
 ## Participant (ParticipantWidget)
 Hereda de la clase QWidget y nos apoyaremos en la clase de contexto Participant.
 Tendremos dos funciones:
@@ -14,7 +25,7 @@ Se apoya en las clases de contexto AppContext, Participant, Session y SessionCom
 Hereda de QListWidgetItem, únicamente cuenta con su método constructor que a su vez llama al constructor de QListWidgetItem, inicializa el atributo sesión y fija el texto 'Session ' + el id de la sesión.
 ### SessionPanelWidget
 Hereda de QWidget. Métodos:
-1. init() (Constructor): llama al constructor de QWidget, inicializa la session a none, un QTimer y enlaza la señal  de timeout de éste último al método on_duration_timer_timeout. Llama a la función setupUI() y  en caso de que la session no sea none llama a la función set_session().
+1. init() (Constructor): llama al constructor de QWidget, inicializa la session a none, un QTimer y enlaza la señal de timeout de éste último al método on_duration_timer_timeout. Llama a la función setupUI() y  en caso de que la session no sea none llama a la función set_session().
 2. set_connection_status(), fijará el texto de connection_txt en función del status de SessionCommunicator.
 3. on_connection_status_changed(), se disparará en caso de que el valor de la variable status de SessionCommunicator se vea modificada.
 4. set_status(), nos permite fijar fijar el texto de status_txt en función del valor que tenga el status de Session.
@@ -29,8 +40,6 @@ Session.
 12. on_start_btn_clicked(), deshabilita start_btn, comprueba que status de Session sea waiting, si cumple con esta condición llama al método start de session. En caso de que no cumpla la condición comprobamos si el status de Session es active, en cuyo caso llamaremos al método stop de Session.
 13. on_start(), fija el texto de start_btn a 'Stop' y lo habilita, cambia el índice actual a 1 y llama al método start de duration_timer pasándole 10.
 14. on_stop(), fija el texto de start_btn a 'Start' y lo habilita, cambia el índice actual a 0 y llama al método stop de duration_timer.
-15. set_session(),
-16. setupUI(), 
-
---Acabar los dos métodos que quedan y poner herencias, imports de todas las clases y poner al lado del titulo el nombre por el que se le reconoce en imports--
+15. set_session(), comprueba que la session sea distinta de none en cuyo caso desconectará las señales de Session y la sesión será la recibida por parámetro. Tras ello, modifica los valores que se muestran referentes a la sesión en la interfaz: id, status de SessionCommunicator, duración de la sesión, status de Session, pregunta en activo, lista de participantes y número de participantes listos. También modificamos el botón Start/Stop en función del status de la nueva sesión. Por último nos conectamos a las señales pyqt de la nueva sesión. 
+16. setupUI(), nos ayudará a montar la interfaz gráfica de gui. Empezamos por crear un panel principal al que le iremos agregando componentes como un panel con los detalles de la sesión (id, status de la conexión, duración, status de la sesión, pregunta activa, lista de participantes, número de participantes listos y el botón Start/Stop).
 
