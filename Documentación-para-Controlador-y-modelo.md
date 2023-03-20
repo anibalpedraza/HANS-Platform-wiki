@@ -1,7 +1,9 @@
 # Contexto
-## init
+## init (AppContext)
+Se apoya en las clases de contexto Question y Session.
 Clase AppContext, crea un objeto Namespace en el que marca que los puertos para los servidores son: 9001 para MQTT y 5000 para API. Tendremos otros atributos como mqtt_broker, api_service, sessions (Array de objetos Session) y questions (Array de objetos Question). Éste último atributo recibirá nuevos objetos gracias a la función reload_question que se apoyará en la función from_folder de Question a la que le pasamos la dirección de todas las preguntas.
-## Mqtt_utils
+## Mqtt_utils (MQTTClient)
+Hereda de ABC. 
 Servirá para controlar el comportamiento de un cliente del servidor MQTT.
 Métodos o funciones:
 1. _init_()(constructor), nos servirá para generar un objeto del tipo MQTTClient cuales atributos serán: host, port, connected,pending_suscriptions, client.
@@ -13,7 +15,7 @@ Métodos o funciones:
 7. susbribe(), la utilizamos para suscribirnos al topic que le pasamos por parámetro.
 8. publish_sync(), utilizamos esta función para enviar un mensaje al servidor y éste envíe ese mensaje a todos los clientes que estén subscritos a ese topic.
 9. publish(), utilizamos esta función para ejecutar la función publish_sync en otro hilo de ejecución.
-## Participant
+## Participant (Participant)
 Dentro de la misma definiremos otra clase llamada status la cual será un atributo de la clase participante que definirá el estado del participante, el estado podrá tomar los valores joined, ready o active.
 El participante también tendrá asociado un id y un nombre. Para el manejo de los ids tendremos una variable que guardará el último id asociado a un participante, la manera de asignar el id a un nuevo participante será sumar uno al último id.
 Definimos una señal llamada on_status_changed asociada al atributo status de Participant.
@@ -22,14 +24,16 @@ Dispondremos de varios métodos:
 2. status() (etiqueta property), retorna el valor del estado del usuario.
 3. status() (etiqueta status.setter), comprobará que el estado entrante no sea el que ya tiene asignado, en ese caso cambia el estado al pasado por parámetro y emitimos una señal de que el status ha cambiado.
 4. as_dict(),  retorna el valor de los atributos del participant (id, username, status).
-## Question
+## Question (Question)
 Los atributos de un objeto de clase Question son: id, prompt, answers, img_path, img_is_local. La clase Question tiene una variable que guardará el último id asociado a una pregunta.
 Métodos o funciones:
 1. _init_()(constructor), nos ayudará a generar un objeto Question con los valores que le pasamos por parámetro y un id correcto.
 2. as_dict(), retornará el valor de los atributos id, prompt y answers.
 3. from_folder(), nos servirá para generar un objeto Question a partir de la dirección de una carpeta en la que deberemos tener la información referente a una pregunta. Lo primero que haremos es comprobar que exista tal archivo y abrir un buffer de lectura a éste. Almacenaremos los datos en una variable suponiendo que la información que contiene el buffer se encuentra en formato JSON. Tras esto pasamos a buscar dentro de esta información la dirección de la imagen de la pregunta. Por último retornamos un objeto Question con los valores cargados del archivo y con su id asociado.
 ## Session
+Se apoya de MQTTClient, Participant y Question.
 ### Objeto SessionCommunicator
+Hereda de MQTTClient.
 Contaremos con un atributo de SessionCommunicator llamado status que podrá tomar los valores disconnected, connected o subscribed.
 También contaremos con los siguientes métodos:
 1. _init()_(constructor), primero modificará el status de SessionCommunicator a disconnected, después haremos referencia al método __init__ de MqttUtils y después utilizamos la función message_callback_add que permite estar suscrito a un topic y marcar como manejador de los mensajes que recibamos de ese topic a una función de nuestra clase SessionCommunicator. Haremos esto último para el topic de control y para el de updates.
@@ -67,13 +71,14 @@ Métodos o funciones:
 12. stop(). Dispondremos de una función callback al igual que en start(), pero en este caso cambiará el status de sesión a waiting. Publicaremos un mensaje de control con el id de la sesión, que contendrá como data 'type : stop'. Por último cierra el buffer de escritura del archivo csv y modificar su valor a None.
 13. participant_update_handler(), recibe por parámetro el propio objeto Session, el id de participante, una marca de tiempo y data (de la cual podemos extraer la posición de la respuesta del participante). Después escribiremos el archivo csv el id de participante, la marca de tiempo y la posición de la respuesta del participante en este orden. En total tendremos 7 campos separados por ',' (el formato de la posición incluye 5 parámetros, se puede consultar el formato en la url "localhost:3000/debug").
 # Servicios
-## init
-Nos apoyaremos en la clase de contexto init (AppContext), en el broker mqtt y en servidor de API.
+## init ()
+Nos apoyaremos en la clase de contexto init (AppContext), BrokerWrapper y ServerAPI.
 Define dos funciones:
 1. start_services(): comprueba que tanto el broker de mqtt como el servidor API se pueda invocar, en cuyo caso inicializamos el atributo mqtt_broker de AppContext con un objeto broker mqtt. Después inicicaliza el broker. Luego hacemos lo mismo para el servidor API.
 2. stop_services(): en caso de que los servicios estén en funcionamiento los para. En el caso del broker mqtt llamará a su método stop, el servidor API llamará a su método shutdown.
 
-## Api
+## Api (ServerAPI)
+Se apoya en AppContext, Participant, Session.
 Primero definimos dos señales la primera on_start y la segunda on_session_created.
 Funciones:
 1. _init_()(constructor), primero inicializamos un hilo, un QObject y un Flask. Definiremos URLs, según las cuales Flask activará la función asociada a esa ruta cuando se recoja una petición. También deberemos de fijar el tipo de petición (GET, POST, PUT, etc).
@@ -91,7 +96,7 @@ Funciones:
 Por último en el constructor levantamos el servidor, declaramos un atributo llamado ctx que guarda el contexto de la app del cual podremos realizar un push.
 2. run(), emite una señal a on_start y ordenará al servidor manejar todas las solicitudes que lleguen hasta que se haga un shutdown().
 3. shutdown(), hace una llamada shutdown() para que el servidor deje de manejar peticiones.
-## Mqtt
+## Mqtt (BrokerWrapper)
 Tendremos las siguientes funciones dentro de la misma:
 1. _init_ (constructor), declara e inicializa los atributos port, thread, process, on_start y on_stop. En el caso del atributo port este se inicializa a 9001.
 2. isRunning(): devuelve el objeto process.
@@ -99,5 +104,6 @@ Tendremos las siguientes funciones dentro de la misma:
 a la que esté apuntando el iterador. Cuando acaba de iterar imprime '[mosquito]' + y el valor del atributo name de stream. Comprueba que pueda invocar al atributo on_stop y si puede la llama. 
 4. start(): Inicializa una variable en la que guardaremos la dirección de la configuración de mosquitto. Crea archivo con la dirección antes especificada y escribe la configuración de mosquitto en él. Guarda en el atributo process un subproceso. Tras la creación de éste subproceso ordena que el subproceso se ejecute en un nuevo hilo para los mensajes de salida y en otro para los mensajes de error. Si el atributo on_start es invocable lo invoca.
 5. stop(): Comprueba que el proceso haya terminado y espera a que los hilos acaben para mandar el codigo de respuesta del atributo process.
-# Main
+# Main 
+Se apoya en AppContext y ServerGUI
 Está función nos permite lanzar los servidores y la interfaz de control.
