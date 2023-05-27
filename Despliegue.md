@@ -31,7 +31,7 @@ Tras estos pasos ya podemos lanzar la instancia.
 * Vamos al apartado de ssh, auth y credentials.
 * Añadimos nuestra clave descargada en el apartado de private key.
 * Vamos a data.
-* Ponemos el nombre del usuario, yo pondré ubuntu por ejemplo.
+* Ponemos el nombre del usuario, como estamos trabajando con Ubuntu el nombre será ubuntu o root (recomiendo ubuntu).
 * Vamos a session.
 * Añadimos un nombre descriptivo a esta configuración, por ejemplo AWS Hans Backend.
 * Damos a save y load
