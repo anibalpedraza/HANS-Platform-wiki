@@ -45,9 +45,8 @@ Después de seguir los pasos del apartado anterior estaremos conectados a nuestr
 * sudo nano mosquitto.conf 
 Añadir al archivo mosquitto.conf la configuración necesaria del servidor de WebSocket, ahora mismo a día 27/05/2023 la configuración es la siguiente:
 
-listener 9002
+listener 9002 
 protocol mqtt
-
 listener 9001
 protocol websockets
 allow_anonymous true
