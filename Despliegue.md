@@ -35,3 +35,33 @@ Tras estos pasos ya podemos lanzar la instancia.
 * Vamos a session.
 * Añadimos un nombre descriptivo a esta configuración, por ejemplo AWS Hans Backend.
 * Damos a save y load
+
+## Configuración de servidores en ec2
+Después de seguir los pasos del apartado anterior estaremos conectados a nuestra instancia EC2. Pasamos ahora a configurar nuestro servidor API y WebSocket:
+* sudo apt-get update
+* sudo apt-get mosquitto
+* cd /etc/mosquitto/conf.d
+* sudo touch mosquitto.conf
+* sudo nano mosquitto.conf 
+Añadir al archivo mosquitto.conf la configuración necesaria del servidor de WebSocket, ahora mismo a día 27/05/2023 la configuración es la siguiente:
+
+listener 9002
+protocol mqtt
+
+listener 9001
+protocol websockets
+allow_anonymous true
+
+* cd
+* git clone https://github.com/GuillermoSantosMolero/Hans-Platform-BackEnd (después añadir el usuario y el token classic)
+* cd Hans..../server
+* sudo apt-get install python3-virtualenv
+* virtualenv backenv
+* source backenv/bin/activate
+* python3 --version
+* python -m pip install --upgrade pip
+* pip install -r requirements.txt
+* python3 -m src.main
+
+Tras esto hecho deberíamos de actualizar el proxy del documento package.json de nuestro frontend y actualizar la ip.
+También tendremos que actualizar la ip en la clase session.js del front cuando se hace la conexión al WebSocket.
