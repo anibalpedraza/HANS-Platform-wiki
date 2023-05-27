@@ -53,7 +53,8 @@ protocol websockets
 allow_anonymous true
 
 * cd
-* git clone https://github.com/GuillermoSantosMolero/Hans-Platform-BackEnd (después añadir el usuario y el token classic)
+* git clone https://github.com/GuillermoSantosMolero/Hans-Platform-BackEnd 
+(Después añadir nuestro usuario de github y cuando nos pide la contraseña debemos de insertar el token classic, si insertamos la contraseña de la cuenta nos dará error).
 * cd Hans..../server
 * sudo apt-get install python3-virtualenv
 * virtualenv backenv
