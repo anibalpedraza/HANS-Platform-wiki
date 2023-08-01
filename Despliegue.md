@@ -38,6 +38,7 @@ Tras estos pasos ya podemos lanzar la instancia.
 
 ## Configuración de servidores en ec2
 Después de seguir los pasos del apartado anterior estaremos conectados a nuestra instancia EC2. Pasamos ahora a configurar nuestro servidor API y WebSocket:
+### Backend
 * sudo apt-get update
 * sudo apt-get mosquitto
 * cd /etc/mosquitto/conf.d
@@ -63,5 +64,22 @@ allow_anonymous true
 * pip install -r requirements.txt
 * python3 -m src.main
 
-Tras esto hecho deberíamos de actualizar el proxy del documento package.json de nuestro frontend y actualizar la ip.
-También tendremos que actualizar la ip en la clase session.js del front cuando se hace la conexión al WebSocket.
+### Frontend
+
+Primero debemos instalar node y npm:
+
+* sudo apt update && sudo apt upgrade
+* curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+* sudo apt-get install nodejs
+* node -v
+* npm -v
+
+Después clonamos el proyecto e instalamos las dependencias:
+
+* sudo git clone https://github.com/GuillermoSantosMolero/Hans-Platform-FrontEnd.git
+* cd Hans-Platform-FrontEnd/
+* npm install 
+
+Con esto deberíamos de poder lanzar el frontend.
+
+* sudo npm start
