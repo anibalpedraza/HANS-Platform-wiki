@@ -83,3 +83,7 @@ Después clonamos el proyecto e instalamos las dependencias:
 Con esto deberíamos de poder lanzar el frontend.
 
 * sudo npm start
+
+## Lanzamiento automático
+
+Para el lanzamiento automático utilizaremos un servicio en systemd, el cual se ejecuta al iniciarse la instancia.
