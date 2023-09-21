@@ -88,3 +88,18 @@ Con esto deberíamos de poder lanzar el frontend.
 
 Para el lanzamiento automático utilizaremos un servicio en systemd, el cual se ejecuta al iniciarse la instancia.
 Dicho servicio ejecuta un script, éste lanza tanto el backend como el frontend.
+El script tiene el siguiente aspecto:
+#!/bin/bash
+until nc -z -v -w30 localhost 80
+do
+  echo "Esperando a que los servicios de red estén disponibles..."
+  sleep 5
+done
+cd /home/ubuntu//hans-frontend/Hans-Platform-FrontEnd
+sudo npm start &
+sleep 5
+cd /home/ubuntu/Hans-Platform-BackEnd/server
+source backenv/bin/activate
+python -m src.main
+
+El script que encontramos en la instancia HansTest no contaría con la comprobación del puerto 80.
