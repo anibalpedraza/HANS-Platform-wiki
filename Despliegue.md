@@ -64,6 +64,10 @@ allow_anonymous true
 * pip install -r requirements.txt
 * python3 -m src.main
 
+## Modificaciones para la implementación de colecciones en el bucket
+
+Para que la instancia pueda acceder a las colecciones debemos asignarle un rol IAM a la instancia, esto se puede hacer seleccionando la instancia y en el apartado de seguridad podemos darle un rol IAM a la instancia. El rol que le hemos dado se denomina Access_S3_with_EC2.
+
 ### Frontend
 
 Primero debemos instalar node y npm:
