@@ -87,3 +87,4 @@ Con esto deberíamos de poder lanzar el frontend.
 ## Lanzamiento automático
 
 Para el lanzamiento automático utilizaremos un servicio en systemd, el cual se ejecuta al iniciarse la instancia.
+Dicho servicio ejecuta un script, éste lanza tanto el backend como el frontend.
