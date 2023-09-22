@@ -43,6 +43,20 @@ Es el componente que permite el login. Puntos a resaltar:
 1. Cuando pulsamos el boton login, este está relacionado con el objeto/función joinSession que recoge la información del formulario y envía una petición post a nuestro controlador api. 
 2. El controlador nos devuelve un mensaje en formato JSON que con el que podremos sacar su status y actuar en consecuencia, en caso de que sea un error mostramos por pantalla que no se ha podido enviar la solicitud de acceso y en caso que no se haya realizado correctamente el proceso mostraremos un mensaje diciendo que no se ha podido entrar a la sesión. Por otro lado tendremos el caso de que el código que nos devuelve la petición a la API sea el 200, es decir éxito, en este caso llamaremos a la función onJoinSession() pasándole el nombre del usuario, el id de dicho usuario y el id de la sesión.
 3. La función onJoinSession() está relacionada con el componente App, dentro de este componente cuando se recibe la llamada se fijan los valores a las variables de sesión.
+## Componente QuestionDetails
+
+A este componente le pasamos título de la pregunta y la imagen de la misma, tendremos un useEffect asociada a ésta última que garantizará que el tamaño de la imagen no exceda el tamaño máximo fijado.
+
+## Componente Countdown
+
+Se encargará de la cuenta atrás que empieza al iniciar el periodo de respuesta. Para conseguir la cuenta atrás necesitaremos que el componente reciba la fecha límite para contestar. 
+Contaremos con un useEffect de la fecha límite, dentro de éste cada un segundo fijaremos el valor de la cuenta atrás al resultado que nos devuelve la función calculateCountdown. Ésta última función nos devuelve la diferencia de tiempo en minutos y segundos entre la fecha límite y la fecha actual.
+
+El componente mostrará el tiempo restante en el formato '10:00' (10 minutos) o 'No time' en caso de que se haya acabado el tiempo o no se haya fijado todavía fecha límite.
+
+## Componente StatusView
+
+Se trata de un componente con intención informativa para el usuario, una vez realizado el login e introducida la sesión, aparece el componente StatusView que nos muestra la sesión a la que estamos suscritos, el estado de nuestra suscripción (entrando o dentro), un mensaje que nos dice que estamos esperando la pregunta y un botón que nos permite salir de la sesión.
 
 ## Componente SessionView
 
@@ -91,13 +105,7 @@ Por último comentar las funciones onUserMagnetMove y onLeaveSessionClick.
 1. onUserMagnetMove: en caso de que el status de la sesión sea active, actualizamos el estado de la posición de la respuesta del usuario y publicamos un mensaje de actualización en el que incluimos la nueva posición y la fecha en la que se ha realizado dicho movimiento.
 2. onLeaveSessionClick: hace una petición a la API para avisar de que el usuario abandona la página. Por último, hace una llamada a onLeave(),que está asociada al componente App. 
 
-## Componente QuestionDetails
 
-A este componente le pasamos título de la pregunta y la imagen de la misma, tendremos un useEffect asociada a ésta última que garantizará que el tamaño de la imagen no exceda el tamaño máximo fijado.
-
-## Componente StatusView
-
-Se trata de un componente con intención informativa para el usuario, una vez realizado el login e introducida la sesión, aparece el componente StatusView que nos muestra la sesión a la que estamos suscritos, el estado de nuestra suscripción (entrando o dentro), un mensaje que nos dice que estamos esperando la pregunta y un botón que nos permite salir de la sesión.
 
 ## Clase para el contexto JS Question
 
