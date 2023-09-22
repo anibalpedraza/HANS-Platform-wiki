@@ -1,4 +1,4 @@
-# Vista cliente
+# Vista cliente (Participante)
 ## Componente App
 
 Es el componente que react considera principal. Este componente inicializará variables de sesión como el id de la sesión, el id del participante y su nombre. También redireccionará en caso de inicio o cierre de sesión.
@@ -128,3 +128,29 @@ También tendremos una clase Session que tendrá las siguientes funcionalidades:
 2. Una función llamada publishControl que recibirá por parámetro un objeto de js con la información que se quiere enviar por el topic de control. La función como su propio nombre indica se encargará de publicar en el topic de control un json con la información del objeto que hemos recibido por parámetro (información de la pregunta por ejemplo).
 3. Otra función llamada publishUpdate que tendrá una función idéntica a la anterior para el topic de actualización. Típicamente el json que se publica hará referencia a la ubicación de la respuesta del participante.
 4. Una última función llamada close que cierra la conexión con el servidor mqtt.
+
+# Vista cliente (Administrador)
+
+Este apartado estará enfocado en la vista de administración, para acceder a ella bastará con añadir a la url '/admin'. Que nos redigirá al componente AdminView.
+
+## Componente AdminView
+Se encarga de mostrar el componente AdminLogin o AdminInterface dependiendo si se ha realizado correctamente el login. Para ello utilizaremos una constante status, que tendrá asociada un useEffect.
+El componente AdminLogin modificará el status y otras variables,
+Cuando la variable status es modificada por AdminLogin, el código del usesEffect asociado realiza lo siguiente:
+
+1. Una petición a la API que devuelve un array con las sesiones activas.
+2. Otra petición a la API, esta vez nos devolverá un objeto de tipo set, una lista de keys (nombre de colecciones) y values asociados a una key (preguntas de la colección). Después de recibir las colecciones llamamos nos apoyaremos en dos métodos para ordenar correctamente las colecciones:
+* customSortCollections: nos ayudará a ordenar las colecciones.
+* customSortQuestions: nos ayudará a ordenar las preguntas de una colección.
+
+## Componente AdminLogin
+
+Cómo su propio nombre indica será el encargado de realizar el login del administrador. Para ello el usuario cuenta con dos cajas de texto, una para el usuario y otra para la contraseña. También contaremos con el botón submit, cuando lo presiona el usuario se realiza una petición de tipo POST que comprueba que las credenciales son correctas, en caso de éxito se llama a la función onJoinSession que está enlazada con el componente AdminView.
+
+## Componente AdminInterface
+
+
+
+
+
+
