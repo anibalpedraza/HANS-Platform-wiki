@@ -135,8 +135,7 @@ Este apartado estará enfocado en la vista de administración, para acceder a el
 
 ## Componente AdminView
 Se encarga de mostrar el componente AdminLogin o AdminInterface dependiendo si se ha realizado correctamente el login. Para ello utilizaremos una constante status, que tendrá asociada un useEffect.
-El componente AdminLogin modificará el status y otras variables,
-Cuando la variable status es modificada por AdminLogin, el código del usesEffect asociado realiza lo siguiente:
+El componente AdminLogin modificará el status, cuando esto ocurre el código del usesEffect asociado a status realiza lo siguiente:
 
 1. Una petición a la API que devuelve un array con las sesiones activas.
 2. Otra petición a la API, esta vez nos devolverá un objeto de tipo set, una lista de keys (nombre de colecciones) y values asociados a una key (preguntas de la colección). Después de recibir las colecciones llamamos nos apoyaremos en dos métodos para ordenar correctamente las colecciones:
