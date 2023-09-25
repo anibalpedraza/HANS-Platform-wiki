@@ -148,8 +148,55 @@ Cómo su propio nombre indica será el encargado de realizar el login del admini
 
 ## Componente AdminInterface
 
+Es el componente principal para la administración de la sesión, en la interfaz de éste se diferencian tres columnas. 
+En la columna izquierda tendremos:
+* Un select con las sesiones activas.
+* Un botón para generar una nueva sesión.
+* El id asociado a la sesión en la que nos encontramos.
+* La duración marcada en la sesión actual (este valor se puede modificar).
+* Un select con las colecciones de las que disponemos.
+* Un select con las preguntas de las que disponemos en la colección seleccionada.
+* Un textArea en la que se mostrarán los participantes de la sesión.
 
+En la columna central:
+* Componente QuestionDetails
+* Componente Countdown
+* Un select con los logs cargados.
+* Un botón para cargar los logs.
+* Un botón para descargar el log seleccionado en el select.
+* Un botón para descargar el log con fecha más reciente.
+* Un botón para descargar todos los logs.
 
+En la columna derecha:
+* Componente BoardView.
 
+Dentro de la lógica que necesitamos para administrar correctamente la sesión necesitaremos lo siguiente:
 
+1. useEffects:
+* sessions: dentro de éste fijaremos la sesión actual a la primera de la lista de sesiones en caso de que ésta no sea nula o esté vacía.
 
+* collections: primero comprobamos que la lista de colecciones no sea nula o esté vacía, sólo entonces haremos lo siguiente:
+1. Fijar la colección y la primera pregunta de ésta a la sesión actual.
+2. Hacemos una llamada a la función fetchQuestion(), con la respuesta de ésta llamada podremos fijar los datos de la pregunta activa. También enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta. 
+
+* selectedSession.id, getParticipantsBySession: primero comprobamos que el id de la sesión actual sea distinto a 0. Después haremos una llamada a getParticipantsBySession(), tras esto fijaremos la sesión actual con un nuevo Objeto Session de la carpeta context. Dentro de la declaración podremos fijar los comportamientos en caso de recibir un mensaje de control o de actualización.
+Casos para un mensaje de control:
+1. Mensaje de tipo join: se actualiza la lista de participantes, en caso de que el status de la sesión sea activa, se le pasa un mensaje de tipo setup con la colección y la pregunta fijadas por el admin.
+2. Mensaje de tipo ready: se actualiza la lista de participantes, en caso de que el status de la sesión sea activa, se le pasa un mensaje de tipo started con la duración y las posiciones de los demás usuarios.
+3. Mensaje de tipo ready: se actualiza la lista de participantes.
+Si el mensaje es de actualización lo que haremos será modificar los valores asociados a la posición del participante que envía el mensaje de actualización.
+
+* peerMagnetPositions: este useEffect nos ayuda a mantener la posición central actualizada en función a las posiciones de respuesta de los participantes.
+
+* shouldPublishCentralPosition, currentSession: su función será esperar a que el tiempo de contestar finalice para enviar la posición media de las respuestas de los usuarios.
+
+Funciones:
+*La función getParticipantsBySession() que utiliza useCallback, ésta función nos sirve para realizar una petición a la api que nos devuelve los participantes con sus estados de una sesión concreta.
+
+*fetchQuestion(collectionId, questionId): devuelve la respuesta a la llamada a la api que nos devuelve los datos de una pregunta de una colección en concreto.
+
+*handlequestionChange, asociado al evento onChange del select de las preguntas. Primero vacía la lista de las respuestas de la anterior pregunta, después fija el id de la pregunta a la sesión actual. Por último realizamos una llamada a fetchquestion(), con la respuesta de la misma fijaremos al pregunta activa y enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta.
+
+*handleCollectionChange, asociado al evento onChange del select de las colecciones. Primero vacía la lista de las respuestas de la anterior pregunta, después fija el id de la colección al valor del elemento que ha generado el evento. También fija la pregunta a la primera pregunta de la colección seleccionada. Por último realizamos una llamada a fetchquestion(), con la respuesta de la misma fijaremos al pregunta activa y enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta.
+
+*
