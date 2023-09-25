@@ -190,8 +190,8 @@ Si el mensaje es de actualización lo que haremos será modificar los valores as
 
 * shouldPublishCentralPosition, currentSession: su función será esperar a que el tiempo de contestar finalice para enviar la posición media de las respuestas de los usuarios.
 
-Funciones:
-*La función getParticipantsBySession() que utiliza useCallback, ésta función nos sirve para realizar una petición a la api que nos devuelve los participantes con sus estados de una sesión concreta.
+2. Funciones:
+* La función getParticipantsBySession() que utiliza useCallback, ésta función nos sirve para realizar una petición a la api que nos devuelve los participantes con sus estados de una sesión concreta.
 
 * fetchQuestion(collectionId, questionId): devuelve la respuesta a la llamada a la api que nos devuelve los datos de una pregunta de una colección en concreto.
 
@@ -205,11 +205,11 @@ Funciones:
 
 * waitOrCloseSession(), se actuará en función de si se está esperando a la cuenta atrás.
 En el caso de que sea la primera llamada a la función:
-1. Fijamos que estamos esperando que acabe la cuenta atrás.
-2. Fijamos un tiempo determinado antes de ejecutar los siguientes puntos.
-3. Permitimos que se pueda publicar el punto central.
-4. Marcamos que no estamos esperando a la cuenta atrás.
-5. Cambiamos el estado de la sesión a waiting.
+a. Fijamos que estamos esperando que acabe la cuenta atrás.
+b. Fijamos un tiempo determinado antes de ejecutar los siguientes puntos.
+c. Permitimos que se pueda publicar el punto central.
+d. Marcamos que no estamos esperando a la cuenta atrás.
+e. Cambiamos el estado de la sesión a waiting.
 En el caso de que no sea la primera llamada a la función, nos saltamos los dos primeros puntos antes mencionados.
 
 * createSession(), asociado al evento onClick del botón de New session. Hacemos una petición a la API para generar una nueva sesión. Si respuesta es exitosa llamaremos a la función onSessionCreated() que está relacionada con el componente AdminView.
