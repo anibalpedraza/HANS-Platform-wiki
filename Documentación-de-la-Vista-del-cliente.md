@@ -193,10 +193,35 @@ Si el mensaje es de actualización lo que haremos será modificar los valores as
 Funciones:
 *La función getParticipantsBySession() que utiliza useCallback, ésta función nos sirve para realizar una petición a la api que nos devuelve los participantes con sus estados de una sesión concreta.
 
-*fetchQuestion(collectionId, questionId): devuelve la respuesta a la llamada a la api que nos devuelve los datos de una pregunta de una colección en concreto.
+* fetchQuestion(collectionId, questionId): devuelve la respuesta a la llamada a la api que nos devuelve los datos de una pregunta de una colección en concreto.
 
-*handlequestionChange, asociado al evento onChange del select de las preguntas. Primero vacía la lista de las respuestas de la anterior pregunta, después fija el id de la pregunta a la sesión actual. Por último realizamos una llamada a fetchquestion(), con la respuesta de la misma fijaremos al pregunta activa y enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta.
+* handlequestionChange(), asociado al evento onChange del select de las preguntas. Primero vacía la lista de las respuestas de la anterior pregunta, después fija el id de la pregunta a la sesión actual. Por último realizamos una llamada a fetchquestion(), con la respuesta de la misma fijaremos al pregunta activa y enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta.
 
-*handleCollectionChange, asociado al evento onChange del select de las colecciones. Primero vacía la lista de las respuestas de la anterior pregunta, después fija el id de la colección al valor del elemento que ha generado el evento. También fija la pregunta a la primera pregunta de la colección seleccionada. Por último realizamos una llamada a fetchquestion(), con la respuesta de la misma fijaremos al pregunta activa y enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta.
+* handleCollectionChange(), asociado al evento onChange del select de las colecciones. Primero vacía la lista de las respuestas de la anterior pregunta, después fija el id de la colección al valor del elemento que ha generado el evento. También fija la pregunta a la primera pregunta de la colección seleccionada. Por último realizamos una llamada a fetchquestion(), con la respuesta de la misma fijaremos al pregunta activa y enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta.
 
-*
+* handleSessionChange(), asociado al evento onChange del select de las sesiones. Fija la sesión actual a la sesión asociada al valor del evento. 
+
+* startSession(), asociado al evento onClick del botón de start/stop. Si el periodo de contestar no ha comenzado, se vacía la lista de las posiciones de las respuestas de los participantes, se pone la posición media de las respuestas en el medio, enviamos un mensaje de control de tipo start con la duración. También se actualiza el estado de la sesión a activa y se fija la fecha para la cuenta atrás. Por último, hacemos una llamada a waitOrCloseSession().
+
+* waitOrCloseSession(), se actuará en función de si se está esperando a la cuenta atrás.
+En el caso de que sea la primera llamada a la función:
+1. Fijamos que estamos esperando que acabe la cuenta atrás.
+2. Fijamos un tiempo determinado antes de ejecutar los siguientes puntos.
+3. Permitimos que se pueda publicar el punto central.
+4. Marcamos que no estamos esperando a la cuenta atrás.
+5. Cambiamos el estado de la sesión a waiting.
+En el caso de que no sea la primera llamada a la función, nos saltamos los dos primeros puntos antes mencionados.
+
+* createSession(), asociado al evento onClick del botón de New session. Hacemos una petición a la API para generar una nueva sesión. Si respuesta es exitosa llamaremos a la función onSessionCreated() que está relacionada con el componente AdminView.
+
+* compareDates(), tal como indica su nombre compara fechas.
+
+* fetchlogs(), realiza una petición a la API que devolverá el nombre de los logs que tengamos en el backend.
+
+* handleLogSelect(), asociado al evento onChange del select de logs.
+
+* downloadFolder(), asociado al evento onClick del botón de Download selected log. Realiza una petición a la API para instalar un log en concreto y descarga el .zip asociado a dicho log.
+
+* downloadLastFolder(), asociado al evento onClick del botón de Download last log. Realiza una petición a la API para instalar el último log de la lista de logs y descarga el .zip asociado a dicho log.
+
+* downloadAllLogs(), asociado al evento onClick del botón de Download all logs. Realiza una petición a la API para instalar todos los logs y descarga el .zip que contiene todos los logs.
