@@ -52,13 +52,12 @@ Contaremos con una subclase de la sesión llamada status que podrá tomar los va
 1. _init_()(constructor), cómo siempre este método nos servirá para generar un objeto de tipo Session.
 Los atributos del objeto Session son id, status (subclase de Session), question, collection, duration, participants (ArrayList de Participant),log_file, resume_file, last_session_time, target_date, answers y communicator (SessionCommunicator).
 Asociamos funciones no definidas de communicator a funciones definidas en Session:
-** on_participant_ready().
-** on_participant_update().
-** on_session_start().
-** on_setup_question().
-** on_session_stop().
+* on_participant_ready().
+* on_participant_update().
+* on_session_start().
+* on_setup_question().
+* on_session_stop().
 Tras esto llamamos a start() de communicator.
-Métodos o funciones:
 
 2. _eq_(), nos permite saber si dos sesiones corresponden a la misma sesión, se basa en el id.
 3. status (etiqueta property), retorna el valor del status de la sesión (Status).
@@ -72,11 +71,11 @@ Métodos o funciones:
 11. active_question(), permite fijar la colección y la pregunta con los valores que nos pasan por parámetro.
 12. session_start_handler(). Dentro de la función lo primero que comprobaremos será que el status de la sesión sea WAITING, tras ello fijaremos los valores de la duración con la entrada por parámetro y la fecha de la sesión con la fecha actual. Después, crearemos dentro de la carpeta session_log una subcarpeta cuya carpeta se llamará por la fecha antes cogida. En esta subcarpeta se guardará primero un archivo tipo JSON con la mayor parte de información de la sesión (fecha en la que se ha generado en archivo, id de la sesión, id de la colección, id de la pregunta, duración de la pregunta y la lista de participantes, ésta lista no se guardará en éste método). Para finalizar abriremos el buffer a dos archivos de tipo csv (el que guardará todas las respuestas que hagan durante el tiempo de contestar y otro con la última posición de cada participante) y cambiaremos el status de la sesión a active.
 13. session_stop_handler(). Definimos una función llamada generate_zip() que como su propio nombre indica nos permite generar un .zip de la carpeta con el nombre de la fecha en la que empezó la sesión. Tras definir ésta función, comprobamos que el estado de la sesión es ACTIVE. Una vez pasamos la condición:
-1. Abrimos el json que se genera en session_start_handler() y guardamos la lista con la información de los participantes.
-2. Cerramos el csv llamado log.
-3. Recorremos la variable en la que guardamos la última posición enviada por cada participante y las escribimos en el csv llamado resume (también se recoge la posición media de las respuestas, enviada por el administrador).
-4. Hacemos llamada a generate_zip()
-5. Actualizamos el estado de la sesión a WAITING.
+* Abrimos el json que se genera en session_start_handler() y guardamos la lista con la información de los participantes.
+* Cerramos el csv llamado log.
+* Recorremos la variable en la que guardamos la última posición enviada por cada participante y las escribimos en el csv llamado resume (también se recoge la posición media de las respuestas, enviada por el administrador).
+* Hacemos llamada a generate_zip()
+* Actualizamos el estado de la sesión a WAITING.
 14. participant_update_handler(), recibe por parámetro el propio objeto Session, el id de participante y data (de la cual podemos extraer la posición de la respuesta del participante y la fecha en la que se envió). Después escribiremos el archivo csv el id de participante, la marca de tiempo y la posición de la respuesta del participante en este orden. En total tendremos 8 campos separados por ',' (el formato de la posición incluye 6 parámetros, se puede consultar el formato en la url "localhost:3000/debug" el ejemplo solo tiene 5 parámetros).
 # Servicios
 ## init ()
