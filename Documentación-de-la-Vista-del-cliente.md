@@ -176,14 +176,14 @@ Dentro de la lógica que necesitamos para administrar correctamente la sesión n
 * sessions: dentro de éste fijaremos la sesión actual a la primera de la lista de sesiones en caso de que ésta no sea nula o esté vacía.
 
 * collections: primero comprobamos que la lista de colecciones no sea nula o esté vacía, sólo entonces haremos lo siguiente:
-1. Fijar la colección y la primera pregunta de ésta a la sesión actual.
-2. Hacemos una llamada a la función fetchQuestion(), con la respuesta de ésta llamada podremos fijar los datos de la pregunta activa. También enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta. 
+a. Fijar la colección y la primera pregunta de ésta a la sesión actual.
+b. Hacemos una llamada a la función fetchQuestion(), con la respuesta de ésta llamada podremos fijar los datos de la pregunta activa. También enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta. 
 
 * selectedSession.id, getParticipantsBySession: primero comprobamos que el id de la sesión actual sea distinto a 0. Después haremos una llamada a getParticipantsBySession(), tras esto fijaremos la sesión actual con un nuevo Objeto Session de la carpeta context. Dentro de la declaración podremos fijar los comportamientos en caso de recibir un mensaje de control o de actualización.
 Casos para un mensaje de control:
-1. Mensaje de tipo join: se actualiza la lista de participantes, en caso de que el status de la sesión sea activa, se le pasa un mensaje de tipo setup con la colección y la pregunta fijadas por el admin.
-2. Mensaje de tipo ready: se actualiza la lista de participantes, en caso de que el status de la sesión sea activa, se le pasa un mensaje de tipo started con la duración y las posiciones de los demás usuarios.
-3. Mensaje de tipo ready: se actualiza la lista de participantes.
+a. Mensaje de tipo join: se actualiza la lista de participantes, en caso de que el status de la sesión sea activa, se le pasa un mensaje de tipo setup con la colección y la pregunta fijadas por el admin.
+b. Mensaje de tipo ready: se actualiza la lista de participantes, en caso de que el status de la sesión sea activa, se le pasa un mensaje de tipo started con la duración y las posiciones de los demás usuarios.
+c. Mensaje de tipo ready: se actualiza la lista de participantes.
 Si el mensaje es de actualización lo que haremos será modificar los valores asociados a la posición del participante que envía el mensaje de actualización.
 
 * peerMagnetPositions: este useEffect nos ayuda a mantener la posición central actualizada en función a las posiciones de respuesta de los participantes.
