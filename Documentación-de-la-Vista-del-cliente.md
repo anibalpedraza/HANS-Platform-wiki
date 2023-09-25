@@ -173,66 +173,64 @@ En la columna derecha:
 Dentro de la lógica que necesitamos para administrar correctamente la sesión necesitaremos lo siguiente:
 
 1. useEffects:
-* sessions: dentro de éste fijaremos la sesión actual a la primera de la lista de sesiones en caso de que ésta no sea nula o esté vacía.
+1.1 sessions: dentro de éste fijaremos la sesión actual a la primera de la lista de sesiones en caso de que ésta no sea nula o esté vacía.
 
-* collections: primero comprobamos que la lista de colecciones no sea nula o esté vacía, sólo entonces haremos lo siguiente:
+1.2 collections: primero comprobamos que la lista de colecciones no sea nula o esté vacía, sólo entonces haremos lo siguiente:
+1.1.1. Fijar la colección y la primera pregunta de ésta a la sesión actual.
+1.1.2. Hacemos una llamada a la función fetchQuestion(), con la respuesta de ésta llamada podremos fijar los datos de la pregunta activa. También enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta. 
 
-a. Fijar la colección y la primera pregunta de ésta a la sesión actual.
-
-b. Hacemos una llamada a la función fetchQuestion(), con la respuesta de ésta llamada podremos fijar los datos de la pregunta activa. También enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta. 
-
-* selectedSession.id, getParticipantsBySession: primero comprobamos que el id de la sesión actual sea distinto a 0. Después haremos una llamada a getParticipantsBySession(), tras esto fijaremos la sesión actual con un nuevo Objeto Session de la carpeta context. Dentro de la declaración podremos fijar los comportamientos en caso de recibir un mensaje de control o de actualización.
+1.3 selectedSession.id, getParticipantsBySession: primero comprobamos que el id de la sesión actual sea distinto a 0. Después haremos una llamada a getParticipantsBySession(), tras esto fijaremos la sesión actual con un nuevo Objeto Session de la carpeta context. Dentro de la declaración podremos fijar los comportamientos en caso de recibir un mensaje de control o de actualización.
 Casos para un mensaje de control:
 
-a. Mensaje de tipo join: se actualiza la lista de participantes, en caso de que el status de la sesión sea activa, se le pasa un mensaje de tipo setup con la colección y la pregunta fijadas por el admin.
+1.3.1. Mensaje de tipo join: se actualiza la lista de participantes, en caso de que el status de la sesión sea activa, se le pasa un mensaje de tipo setup con la colección y la pregunta fijadas por el admin.
 
-b. Mensaje de tipo ready: se actualiza la lista de participantes, en caso de que el status de la sesión sea activa, se le pasa un mensaje de tipo started con la duración y las posiciones de los demás usuarios.
+1.3.2. Mensaje de tipo ready: se actualiza la lista de participantes, en caso de que el status de la sesión sea activa, se le pasa un mensaje de tipo started con la duración y las posiciones de los demás usuarios.
 
-c. Mensaje de tipo ready: se actualiza la lista de participantes.
+1.3.3. Mensaje de tipo leave: se actualiza la lista de participantes.
 Si el mensaje es de actualización lo que haremos será modificar los valores asociados a la posición del participante que envía el mensaje de actualización.
 
-* peerMagnetPositions: este useEffect nos ayuda a mantener la posición central actualizada en función a las posiciones de respuesta de los participantes.
+1.4 peerMagnetPositions: este useEffect nos ayuda a mantener la posición central actualizada en función a las posiciones de respuesta de los participantes.
 
-* shouldPublishCentralPosition, currentSession: su función será esperar a que el tiempo de contestar finalice para enviar la posición media de las respuestas de los usuarios.
+1.5 shouldPublishCentralPosition, currentSession: su función será esperar a que el tiempo de contestar finalice para enviar la posición media de las respuestas de los usuarios.
 
 2. Funciones:
-* La función getParticipantsBySession() que utiliza useCallback, ésta función nos sirve para realizar una petición a la api que nos devuelve los participantes con sus estados de una sesión concreta.
+2.1 La función getParticipantsBySession() que utiliza useCallback, ésta función nos sirve para realizar una petición a la api que nos devuelve los participantes con sus estados de una sesión concreta.
 
-* fetchQuestion(collectionId, questionId): devuelve la respuesta a la llamada a la api que nos devuelve los datos de una pregunta de una colección en concreto.
+2.2 fetchQuestion(collectionId, questionId): devuelve la respuesta a la llamada a la api que nos devuelve los datos de una pregunta de una colección en concreto.
 
-* handlequestionChange(), asociado al evento onChange del select de las preguntas. Primero vacía la lista de las respuestas de la anterior pregunta, después fija el id de la pregunta a la sesión actual. Por último realizamos una llamada a fetchquestion(), con la respuesta de la misma fijaremos al pregunta activa y enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta.
+2.3 handlequestionChange(), asociado al evento onChange del select de las preguntas. Primero vacía la lista de las respuestas de la anterior pregunta, después fija el id de la pregunta a la sesión actual. Por último realizamos una llamada a fetchquestion(), con la respuesta de la misma fijaremos al pregunta activa y enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta.
 
-* handleCollectionChange(), asociado al evento onChange del select de las colecciones. Primero vacía la lista de las respuestas de la anterior pregunta, después fija el id de la colección al valor del elemento que ha generado el evento. También fija la pregunta a la primera pregunta de la colección seleccionada. Por último realizamos una llamada a fetchquestion(), con la respuesta de la misma fijaremos al pregunta activa y enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta.
+2.4 handleCollectionChange(), asociado al evento onChange del select de las colecciones. Primero vacía la lista de las respuestas de la anterior pregunta, después fija el id de la colección al valor del elemento que ha generado el evento. También fija la pregunta a la primera pregunta de la colección seleccionada. Por último realizamos una llamada a fetchquestion(), con la respuesta de la misma fijaremos al pregunta activa y enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta.
 
-* handleSessionChange(), asociado al evento onChange del select de las sesiones. Fija la sesión actual a la sesión asociada al valor del evento. 
+2.5 handleSessionChange(), asociado al evento onChange del select de las sesiones. Fija la sesión actual a la sesión asociada al valor del evento. 
 
-* startSession(), asociado al evento onClick del botón de start/stop. Si el periodo de contestar no ha comenzado, se vacía la lista de las posiciones de las respuestas de los participantes, se pone la posición media de las respuestas en el medio, enviamos un mensaje de control de tipo start con la duración. También se actualiza el estado de la sesión a activa y se fija la fecha para la cuenta atrás. Por último, hacemos una llamada a waitOrCloseSession().
+2.6 startSession(), asociado al evento onClick del botón de start/stop. Si el periodo de contestar no ha comenzado, se vacía la lista de las posiciones de las respuestas de los participantes, se pone la posición media de las respuestas en el medio, enviamos un mensaje de control de tipo start con la duración. También se actualiza el estado de la sesión a activa y se fija la fecha para la cuenta atrás. Por último, hacemos una llamada a waitOrCloseSession().
 
-* waitOrCloseSession(), se actuará en función de si se está esperando a la cuenta atrás.
+2.7 waitOrCloseSession(), se actuará en función de si se está esperando a la cuenta atrás.
 En el caso de que sea la primera llamada a la función:
 
-a. Fijamos que estamos esperando que acabe la cuenta atrás.
+2.7.1. Fijamos que estamos esperando que acabe la cuenta atrás.
 
-b. Fijamos un tiempo determinado antes de ejecutar los siguientes puntos.
+2.7.2. Fijamos un tiempo determinado antes de ejecutar los siguientes puntos.
 
-c. Permitimos que se pueda publicar el punto central.
+2.7.3. Permitimos que se pueda publicar el punto central.
 
-d. Marcamos que no estamos esperando a la cuenta atrás.
+2.7.4. Marcamos que no estamos esperando a la cuenta atrás.
 
-e. Cambiamos el estado de la sesión a waiting.
+2.7.5. Cambiamos el estado de la sesión a waiting.
 
 En el caso de que no sea la primera llamada a la función, nos saltamos los dos primeros puntos antes mencionados.
 
-* createSession(), asociado al evento onClick del botón de New session. Hacemos una petición a la API para generar una nueva sesión. Si respuesta es exitosa llamaremos a la función onSessionCreated() que está relacionada con el componente AdminView.
+2.8 createSession(), asociado al evento onClick del botón de New session. Hacemos una petición a la API para generar una nueva sesión. Si respuesta es exitosa llamaremos a la función onSessionCreated() que está relacionada con el componente AdminView.
 
-* compareDates(), tal como indica su nombre compara fechas.
+2.9 compareDates(), tal como indica su nombre compara fechas.
 
-* fetchlogs(), realiza una petición a la API que devolverá el nombre de los logs que tengamos en el backend.
+2.10 fetchlogs(), realiza una petición a la API que devolverá el nombre de los logs que tengamos en el backend.
 
-* handleLogSelect(), asociado al evento onChange del select de logs.
+2.11 handleLogSelect(), asociado al evento onChange del select de logs.
 
-* downloadFolder(), asociado al evento onClick del botón de Download selected log. Realiza una petición a la API para instalar un log en concreto y descarga el .zip asociado a dicho log.
+2.12 downloadFolder(), asociado al evento onClick del botón de Download selected log. Realiza una petición a la API para instalar un log en concreto y descarga el .zip asociado a dicho log.
 
-* downloadLastFolder(), asociado al evento onClick del botón de Download last log. Realiza una petición a la API para instalar el último log de la lista de logs y descarga el .zip asociado a dicho log.
+2.13 downloadLastFolder(), asociado al evento onClick del botón de Download last log. Realiza una petición a la API para instalar el último log de la lista de logs y descarga el .zip asociado a dicho log.
 
-* downloadAllLogs(), asociado al evento onClick del botón de Download all logs. Realiza una petición a la API para instalar todos los logs y descarga el .zip que contiene todos los logs.
+2.14 downloadAllLogs(), asociado al evento onClick del botón de Download all logs. Realiza una petición a la API para instalar todos los logs y descarga el .zip que contiene todos los logs.
