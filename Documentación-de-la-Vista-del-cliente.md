@@ -176,13 +176,18 @@ Dentro de la lógica que necesitamos para administrar correctamente la sesión n
 * sessions: dentro de éste fijaremos la sesión actual a la primera de la lista de sesiones en caso de que ésta no sea nula o esté vacía.
 
 * collections: primero comprobamos que la lista de colecciones no sea nula o esté vacía, sólo entonces haremos lo siguiente:
+
 a. Fijar la colección y la primera pregunta de ésta a la sesión actual.
+
 b. Hacemos una llamada a la función fetchQuestion(), con la respuesta de ésta llamada podremos fijar los datos de la pregunta activa. También enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta. 
 
 * selectedSession.id, getParticipantsBySession: primero comprobamos que el id de la sesión actual sea distinto a 0. Después haremos una llamada a getParticipantsBySession(), tras esto fijaremos la sesión actual con un nuevo Objeto Session de la carpeta context. Dentro de la declaración podremos fijar los comportamientos en caso de recibir un mensaje de control o de actualización.
 Casos para un mensaje de control:
+
 a. Mensaje de tipo join: se actualiza la lista de participantes, en caso de que el status de la sesión sea activa, se le pasa un mensaje de tipo setup con la colección y la pregunta fijadas por el admin.
+
 b. Mensaje de tipo ready: se actualiza la lista de participantes, en caso de que el status de la sesión sea activa, se le pasa un mensaje de tipo started con la duración y las posiciones de los demás usuarios.
+
 c. Mensaje de tipo ready: se actualiza la lista de participantes.
 Si el mensaje es de actualización lo que haremos será modificar los valores asociados a la posición del participante que envía el mensaje de actualización.
 
@@ -205,11 +210,17 @@ Si el mensaje es de actualización lo que haremos será modificar los valores as
 
 * waitOrCloseSession(), se actuará en función de si se está esperando a la cuenta atrás.
 En el caso de que sea la primera llamada a la función:
+
 a. Fijamos que estamos esperando que acabe la cuenta atrás.
+
 b. Fijamos un tiempo determinado antes de ejecutar los siguientes puntos.
+
 c. Permitimos que se pueda publicar el punto central.
+
 d. Marcamos que no estamos esperando a la cuenta atrás.
+
 e. Cambiamos el estado de la sesión a waiting.
+
 En el caso de que no sea la primera llamada a la función, nos saltamos los dos primeros puntos antes mencionados.
 
 * createSession(), asociado al evento onClick del botón de New session. Hacemos una petición a la API para generar una nueva sesión. Si respuesta es exitosa llamaremos a la función onSessionCreated() que está relacionada con el componente AdminView.
