@@ -57,6 +57,7 @@ Asociamos funciones no definidas de communicator a funciones definidas en Sessio
 * on_session_start().
 * on_setup_question().
 * on_session_stop().
+
 Tras esto llamamos a start() de communicator.
 
 2. _eq_(), nos permite saber si dos sesiones corresponden a la misma sesión, se basa en el id.
@@ -86,31 +87,37 @@ Define dos funciones:
 
 ## Api (ServerAPI)
 Se apoya en AppContext, Participant, Session.
-Primero definimos dos señales la primera on_start y la segunda on_session_created.
 Funciones:
 1. _init_()(constructor), primero inicializamos un hilo, un QObject y un Flask. Definiremos URLs, según las cuales Flask activará la función asociada a esa ruta cuando se recoja una petición. También deberemos de fijar el tipo de petición (GET, POST, PUT, etc).
 * Ruta("/api/session/<int:session_id>", tipo GET): llama a la función api_session_handle_get(), la cual intentará obtener la sesión asociada al id que entra por parámetro. Devuelve un JSON con la información de la sesión o un error 404.
-* Ruta("/api/session", tipo GET): llama a la función api_get_all_sessions() que devolverá la información de todas las sesiones activas.
+* Ruta("/api/session", tipo POST): llama a la función api_get_all_sessions() que devolverá la información de todas las sesiones activas en caso de que sea el admin el que lo solicita.
 * Ruta("/api/session", tipo POST): asociada a la función api_create_session, genera una nueva sesión y devuelve la información de la misma.
 * Ruta("/api/session/<int:session_id>", tipo GET): asociada a la función api_edit_session, obtiene la sesión asociada al id pasado por parámetro, en caso de no existir esa session la función devuelve un error 404. Cuando los datos recibidos en la petición en formato JSON no se corresponden con la sesión devolvemos un error 400. Si los datos si que corresponden, actualizaremos el status de la session, el id de la pregunta y su duración (realizando distintas comprobaciones que pueden hacer que la función devuelva un error 400 o 404). Por último la función devuelve la información de la sesión ya actualizada en formato JSON.
-* Ruta("/api/session/<int:session_id>/participants", tipo GET): asociada a la función api_session_get_all_participants, devuelve información en formato JSON de los participantes de la sesión asociada al id que recibimos por parámetro.
-* Ruta("/api/session/<int:session_id>/participants", tipo POST): asociada a la función api_session_add_participant, primero comprueba que dentro de los datos de la petición se encuentre informción referente al user, tras ello comprueba que exista una sesión asociada al id recibido por parámetro. La última comprobación es que no exista un participante dentro de la sesión con el mismo nombre que el username que se recoge de los datos de la petición. Por último declaramos un objeto de tipo Participant, lo agregamos a la lista de participantes de la sesión y devolvemos la información del objeto Participant en formato JSON.
-* Ruta("/api/session/<int:session_id>/participants/<int:participant_id>", tipo DELETE): No implementado
-* Ruta("/api/question/<int:question_id>"): asociada a la función api_question_handle, primero comprueba que exista una pregunta asociada al id recibido por parámetro y devuelve información de dicha pregunta en formato JSON.
-* Ruta("/api/question/<int:question_id>/image"): asociada a la función api_question_image_handle, primero comprueba que exista una pregunta asociada al id recibido por parámetro y devuelve la dirección de la imagen de dicha pregunta.
+* Ruta("/api/session/<int:session_id>/participants", tipo GET): asociada a la función api_session_get_all_participants, devuelve información en formato JSON de los participantes de la sesión asociada al id que recibimos por parámetro solo si el que lo solicita es el admin.
+* Ruta("/api/session/<int:session_id>/participants", tipo POST): asociada a la función api_session_add_participant, primero comprueba que dentro de los datos de la petición se encuentre información referente al user, tras ello comprueba que exista una sesión asociada al id recibido por parámetro. La última comprobación es que no exista un participante dentro de la sesión con el mismo nombre que el username que se recoge de los datos de la petición y si está, que su status sea offline. Por último declaramos un objeto de tipo Participant, lo agregamos a la lista de participantes de la sesión y devolvemos la información del objeto Participant en formato JSON.
+* Ruta("/api/session/<int:session_id>/participants/<int:participant_id>", tipo POST): asociada a la función api_session_remove_participant, sirve para poner a offline a un participante de una sesión en concreto.
+* Ruta("/api/collection"): asociada a la función api_get_all_collections, devuelve una lista de todas las colecciones.
+* Ruta("api/<string:collection>/question"): asociada a la función api_get_all_questions, devuelve una lista de todas las preguntas de una colección.
+* Ruta("/api/question/<string:collection>/<string:question_id>"): asociada a la función api_question_handle, primero comprueba que exista una colección asociada al id recibido por parámetro y también que exista una pregunta asociada al id recibido por parámetro. Tras estas comprobaciones buscamos el archivo info.json de la pregunta en el bucket que contiene la información de la pregunta.
+* Ruta("/api/question/<string:collection>/<string:question_id>/image"): asociada a la función api_question_image_handle, primero comprueba que exista una colección asociada al id recibido por parámetro y también que exista una pregunta asociada al id recibido por parámetro. Devuelve la imagen asociada a la pregunta que está en el bucket.
 * Ruta('/', defaults={'path': ''}) y ruta("/<path:path>"): asociada a la función client_handler, redirecciona a las distintas páginas de nuestra app.
+* Ruta("/api/admin/login"): asociada a la función api_admin_login, nos permite hacer el login del admin
+* Ruta("/api/createSession"): asociada a la función api_create_session, nos permite crear una nueva sesión si la solicitud es del admin.
+* Ruta("/api/downloadLog/<path:zip_filename>"): asociada a la función download_log, nos permite descargar el log que entra por parámetro si la solicitud es del admin.
+* Ruta("/api/downloadAllLogs"): asociada a la función download_all_logs, nos permite descargar todos los logs si la solicitud es del admin (descarga carpeta zips). Debajo de download_all_logs tenemos generate_all_logs_zip(), función que genera el zip de todos los logs.
+* Ruta("/api/listLogs"): asociada a la función list_logs, devuelve una lista con todos los logs.
 
 Por último en el constructor levantamos el servidor, declaramos un atributo llamado ctx que guarda el contexto de la app del cual podremos realizar un push.
 2. run(), emite una señal a on_start y ordenará al servidor manejar todas las solicitudes que lleguen hasta que se haga un shutdown().
 3. shutdown(), hace una llamada shutdown() para que el servidor deje de manejar peticiones.
 ## Mqtt (BrokerWrapper)
 Tendremos las siguientes funciones dentro de la misma:
-1. _init_ (constructor), declara e inicializa los atributos port, thread, process, on_start y on_stop. En el caso del atributo port este se inicializa a 9001.
+1. _init_ (constructor), declara e inicializa los atributos port, thread, process, on_start y on_stop. En el caso del atributo port este se inicializa a 1883.
 2. isRunning(): devuelve el objeto process.
 3. _monitor(): recorre el atributo readline de la variable stream que se le pasa por parámetro e imprime por pantalla '[mosquitto]' + la información de la linea 
 a la que esté apuntando el iterador. Cuando acaba de iterar imprime '[mosquito]' + y el valor del atributo name de stream. Comprueba que pueda invocar al atributo on_stop y si puede la llama. 
 4. start(): Inicializa una variable en la que guardaremos la dirección de la configuración de mosquitto. Crea archivo con la dirección antes especificada y escribe la configuración de mosquitto en él. Guarda en el atributo process un subproceso. Tras la creación de éste subproceso ordena que el subproceso se ejecute en un nuevo hilo para los mensajes de salida y en otro para los mensajes de error. Si el atributo on_start es invocable lo invoca.
-5. stop(): Comprueba que el proceso haya terminado y espera a que los hilos acaben para mandar el codigo de respuesta del atributo process.
+5. stop(): Comprueba que el proceso haya terminado y espera a que los hilos acaben para mandar el código de respuesta del atributo process.
 # Main 
-Se apoya en AppContext y ServerGUI
-Está función nos permite lanzar los servidores y la interfaz de control.
+Se apoya en AppContext.
+Está función nos permite lanzar los servidores, antes de lanzarlos llamamos a la función reload_collections() de AppContext.
