@@ -106,3 +106,7 @@ source backenv/bin/activate
 python -m src.main
 
 El script que encontramos en la instancia HansTest no contaría con la comprobación del puerto 80.
+
+Para que los cambios que hayamos hecho en nuestro repositorio surjan efecto tendremos dos opciones: 
+1. Detener e iniciar la instancia.
+2. Parar el servicio (sudo systemctl stop lanzamiento), ejecutar el script que baja los cambios (./collections_sync) e iniciar el servicio (sudo systemctl start lanzamiento)
