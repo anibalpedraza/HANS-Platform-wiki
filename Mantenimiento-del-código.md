@@ -1,3 +1,7 @@
+## Script de sincronización
+
+Cuando la instancia arranca se debería de sincronizar el código que tengamos en github, de esta manera nuestra aplicación siempre correrá la última versión que tengamos. En HansTest tendremos el código de la rama Dev y en HansBack el código de la rama main. Si en el lanzamiento fallase la sincronización tenemos la opción de correr el script de sincronización manualmente. Para correr el script debemos meternos en la instancia y lanzar el script llamado collectionsSync.sh.
+
 ## Mantenimiento del backend
 
 (Para subir los cambios que hayamos hecho en local y que hemos subido al repositorio Hans-Platform-Backend)
