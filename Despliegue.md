@@ -90,23 +90,45 @@ Para que la instancia pueda acceder a las colecciones debemos asignarle un rol I
 ## Lanzamiento automático
 
 Para el lanzamiento automático utilizaremos un servicio en systemd, el cual se ejecuta al iniciarse la instancia.
-Dicho servicio ejecuta un script, éste lanza tanto el backend como el frontend.
-El script tiene el siguiente aspecto:
+Dicho servicio ejecuta el script start_app.sh. Este spript lo primero que hace es llamar a otro script llamado collectionsSync.sh que sincroniza el contenido de nuestro repositorio de Github con el que vayamos a correr en la máquina.
+
+El script de collectionsSync tiene este aspecto:
+´´´sh
 #!/bin/bash
-until nc -z -v -w30 localhost 80
-do
-  echo "Esperando a que los servicios de red estén disponibles..."
-  sleep 5
-done
-cd /home/ubuntu//hans-frontend/Hans-Platform-FrontEnd
+
+git config --add safe.directory /home/ubuntu/Hans-Platform-BackEnd
+# Cambia al directorio del repositorio
+cd "/home/ubuntu/Copia-Frontend/Hans-Platform-FrontEnd" || exit
+
+git checkout Dev
+# Realiza git pull para traer los cambios
+git pull
+
+cd
+
+sudo rsync -av --delete /home/ubuntu/Copia-Frontend/Hans-Platform-FrontEnd/src/* /home/ubuntu/Hans-Platform-FrontEnd/src
+sudo rsync -av --delete /home/ubuntu/Copia-Frontend/Hans-Platform-FrontEnd/package* /home/ubuntu/Hans-Platform-FrontEnd
+
+cd "/home/ubuntu/Hans-Platform-BackEnd"
+git checkout Dev
+
+git pull
+
+´´´
+
+El script que lanza los servidores de backend y frontend (start_app.sh) tiene este aspecto:
+
+´´´sh
+#!/bin/bash
+/home/ubuntu/collectionsSync.sh
+cd /home/ubuntu/Hans-Platform-FrontEnd
 sudo npm start &
 sleep 5
 cd /home/ubuntu/Hans-Platform-BackEnd/server
 source backenv/bin/activate
 python -m src.main
 
-El script que encontramos en la instancia HansTest no contaría con la comprobación del puerto 80.
-
+´´´
 Para que los cambios que hayamos hecho en nuestro repositorio surjan efecto tendremos dos opciones: 
 1. Detener e iniciar la instancia.
 2. Parar el servicio (sudo systemctl stop lanzamiento), ejecutar el script que baja los cambios (./collections_sync) e iniciar el servicio (sudo systemctl start lanzamiento)
