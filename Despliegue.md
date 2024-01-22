@@ -130,4 +130,4 @@ python -m src.main
 ```
 Para que los cambios que hayamos hecho en nuestro repositorio surjan efecto tendremos dos opciones: 
 1. Detener e iniciar la instancia.
-2. Parar el servicio (sudo systemctl stop lanzamiento), ejecutar el script que baja los cambios (./collections_sync) e iniciar el servicio (sudo systemctl start lanzamiento)
+2. Parar el servicio (sudo systemctl stop lanzamiento) e iniciar el servicio (sudo systemctl start lanzamiento).
