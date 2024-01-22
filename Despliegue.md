@@ -93,7 +93,7 @@ Para el lanzamiento automático utilizaremos un servicio en systemd, el cual se 
 Dicho servicio ejecuta el script start_app.sh. Este spript lo primero que hace es llamar a otro script llamado collectionsSync.sh que sincroniza el contenido de nuestro repositorio de Github con el que vayamos a correr en la máquina.
 
 El script de collectionsSync tiene este aspecto:
-´´´sh
+```sh
 #!/bin/bash
 
 git config --add safe.directory /home/ubuntu/Hans-Platform-BackEnd
@@ -114,11 +114,10 @@ git checkout Dev
 
 git pull
 
-´´´
+```
 
 El script que lanza los servidores de backend y frontend (start_app.sh) tiene este aspecto:
-
-´´´sh
+```sh
 #!/bin/bash
 /home/ubuntu/collectionsSync.sh
 cd /home/ubuntu/Hans-Platform-FrontEnd
@@ -128,7 +127,7 @@ cd /home/ubuntu/Hans-Platform-BackEnd/server
 source backenv/bin/activate
 python -m src.main
 
-´´´
+```
 Para que los cambios que hayamos hecho en nuestro repositorio surjan efecto tendremos dos opciones: 
 1. Detener e iniciar la instancia.
 2. Parar el servicio (sudo systemctl stop lanzamiento), ejecutar el script que baja los cambios (./collections_sync) e iniciar el servicio (sudo systemctl start lanzamiento)
