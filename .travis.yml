@@ -1,0 +1,15 @@
+script:
+- |-
+  git config user.name "anibalpedraza"
+  git config user.email "87324214+anibalpedraza@users.noreply.github.com"
+  git remote remove origin
+  git remote add origin https://$GITHUB_API_KEY@github.com/UCLM-VISILAB/HANS-Platform-wiki.git > /dev/null 2>&1
+  git remote add upstream https://$GITHUB_API_KEY@github.com/GuillermoSantosMolero/HANS-Platform.wiki.git > /dev/null 2>&1
+  git fetch origin
+  git fetch upstream
+  git merge upstream/master --no-edit
+  git push origin HEAD:master > /dev/null 2>&1
+  git push upstream HEAD:master > /dev/null 2>&1
+env:
+  matrix:
+    secure: I5HjWHjZrYe16I5+hu5TtPVNRNv/zYUwuEOxwbENdj6qGWaMJ9P+kdgB5aYj6AvG42pGDFMf0Upo/sc0xDqhzzChFNtqG1FWzq+AyO/mQEeQQ1kqIuqdQ6hk/j5eGZaPYPTAB6zbZQRk6ppqXEYwpDSlh7JQtbnss/oMtHVAxvfVWUrN4YQYG06XSd8J71R3pZAaT8EDBuINCbwer/6S5nzpAsHEJ6vCX6m+ft7WUUmQ58XduqB28f0kocsVTLdBaV4HCXfqp4tJiFRhwXlUGKHU9w+0rPINGTIq7sH90F8Bo+7La1rqDPNfxU2Vg0l901cPLm8qaK2AM8aeQwrtYI+i+30L3rZlHZ+O26+rToxrAjPta8/nYek+6oSeGtw+EhpvB4ycsJSY9/Hld39YEBYJFB6R8pT+B0pNklpDedLhkRlakkNQrV4NgyE820M5Moug61U0Pm7ZXO0/zQHPKiRh25kbUfsWCvf3LQ4KLrqcBJxPJr4KnUjvq2OWy6ompuDZHDjx8rG+7F8BbcL5RqmhaxVmBJX9pURCZxtmqJvCWluiFVHXuQo4Qjv+FVBeiau37CrDgRZypWJvCtmihqe5iOkGHwss1sgreTZIh9A6yz/oKe7lnwS17u5gfS4BcLyEeU1dz4yjExDzn9f860X3l6A3OjWPwh2h0oFqtFU=
