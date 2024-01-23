@@ -3,7 +3,7 @@ script:
   git config user.name "anibalpedraza"
   git config user.email "87324214+anibalpedraza@users.noreply.github.com"
   git remote remove origin
-  git remote add origin https://$GITHUB_API_KEY@github.com/UCLM-VISILAB/HANS-Platform-wiki.git > /dev/null 2>&1
+  git remote add origin https://$GITHUB_API_KEY@github.com/anibalpedraza/HANS-Platform-wiki.git > /dev/null 2>&1
   git remote add upstream https://$GITHUB_API_KEY@github.com/GuillermoSantosMolero/HANS-Platform.wiki.git > /dev/null 2>&1
   git fetch origin
   git fetch upstream
