@@ -23,7 +23,8 @@ Tras estos pasos ya podemos lanzar la instancia.
 
 ## Configurar servidor remoto con PuTTY:
 
-* Después de instalar PuTTY, abrir el Key Generator.
+* Instalar PuTTY
+* En caso de tener una clave tipo "pem" (formato para OpenSSH), utilizar el Key Generator (programa "puttygen.exe" que se encuentra en el directorio de instalacion junto al resto de utilidades) para convertirla al formato "ppk".
 * Importar la clave que descargamos al crear la instancia (desde conversions).
 * Damos en save private key.
 * Abrimos configurador de PuTTY.
