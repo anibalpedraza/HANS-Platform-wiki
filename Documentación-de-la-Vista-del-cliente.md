@@ -150,30 +150,35 @@ Cómo su propio nombre indica será el encargado de realizar el login del admini
 
 Es el componente principal para la administración de la sesión, en la interfaz de éste se diferencian tres columnas. 
 En la columna izquierda tendremos:
-* Un select con las sesiones activas.
-* Un botón para generar una nueva sesión.
+* Select con las sesiones activas.
+* Botón para generar una nueva sesión.
 * El id asociado a la sesión en la que nos encontramos.
 * La duración marcada en la sesión actual (este valor se puede modificar).
-* Un select con las colecciones de las que disponemos.
-* Un select con las preguntas de las que disponemos en la colección seleccionada.
-* Un textArea en la que se mostrarán los participantes de la sesión.
+* Select con las colecciones de las que disponemos.
+* Select con las preguntas de las que disponemos en la colección seleccionada.
+* TextArea en la que se mostrarán los participantes de la sesión.
 
 En la columna central:
 * Componente QuestionDetails
 * Componente Countdown
-* Un select con los logs cargados.
-* Un botón para cargar los logs.
-* Un botón para descargar el log seleccionado en el select.
-* Un botón para descargar el log con fecha más reciente.
-* Un botón para descargar todos los logs.
-
+* Texto que marca la cantidad de logs que se han generado
+* Select con los logs generados.
+* Botón para cargar los logs.
+* Botón para descargar el log seleccionado en el select.
+* Botón para descargar el log con fecha más reciente.
+* Botón para descargar todos los logs.
+* Botón para descargar todas las trayectorias.
+* Botón para borrar todas las trayectorias y los logs asociados a estas trayectorias. Pedirá confirmación
+* Botón para borrar todos los logs generados. Pedirá doble confirmación.
+* Texto que marca el modo en el que está la aplicación. Tenemos dos modos (Normal mode y Trajectories mode), el primero sería el uso normal de la aplicación (modo que se debe de utilizar en sesión con expertos), el segundo sería para conseguir trayectorias (si tenemos este modo seleccionado se generan las trayectorias).
+* Botón check que permite variar el modo en el que se encuentra la aplicación. Seleccionado -> Trajectories mode y No seleccionado -> Normal mode.
 En la columna derecha:
 * Componente BoardView.
 
 Dentro de la lógica que necesitamos para administrar correctamente la sesión necesitaremos lo siguiente:
 
 1. useEffects:
-* sessions: dentro de éste fijaremos la sesión actual a la primera de la lista de sesiones en caso de que ésta no sea nula o esté vacía.
+* sessions: se ejecutará cuando se cargue la aplicación y cuando generemos una nueva sesión. En caso de tener alguna sesión, fija la colección en la primera del listado de colecciones y fija también la primera pregunta de la lista de ésta.
 
 * collections: primero comprobamos que la lista de colecciones no sea nula o esté vacía, sólo entonces haremos lo siguiente:
 1. Fijar la colección y la primera pregunta de ésta a la sesión actual.
@@ -182,23 +187,21 @@ Dentro de la lógica que necesitamos para administrar correctamente la sesión n
 * selectedSession.id, getParticipantsBySession: primero comprobamos que el id de la sesión actual sea distinto a 0. Después haremos una llamada a getParticipantsBySession(), tras esto fijaremos la sesión actual con un nuevo Objeto Session de la carpeta context. Dentro de la declaración podremos fijar los comportamientos en caso de recibir un mensaje de control o de actualización.
 Casos para un mensaje de control:
 
-1. Mensaje de tipo join: se actualiza la lista de participantes, en caso de que el status de la sesión sea activa, se le pasa un mensaje de tipo setup con la colección y la pregunta fijadas por el admin.
-
-2. Mensaje de tipo ready: se actualiza la lista de participantes, en caso de que el status de la sesión sea activa, se le pasa un mensaje de tipo started con la duración y las posiciones de los demás usuarios.
-
+1. Mensaje de tipo join: se actualiza la lista de participantes.
+2. Mensaje de tipo ready: en caso de que el status de la sesión sea activa, se le pasa un mensaje de tipo started con la duración y las posiciones de los demás usuarios. Después se actualiza la lista de participantes.
 3. Mensaje de tipo leave: se actualiza la lista de participantes.
 Si el mensaje es de actualización lo que haremos será modificar los valores asociados a la posición del participante que envía el mensaje de actualización.
 
 * peerMagnetPositions: este useEffect nos ayuda a mantener la posición central actualizada en función a las posiciones de respuesta de los participantes.
 
-* shouldPublishCentralPosition, currentSession: su función será esperar a que el tiempo de contestar finalice para enviar la posición media de las respuestas de los usuarios.
+* shouldPublishCentralPosition, currentSession: su función será esperar a que el tiempo de contestar finalice para enviar la posición media de las respuestas de los usuarios. También envía el mensaje de stop, junto con el modo que está seleccionado.
 
 2. Funciones:
 * La función getParticipantsBySession() que utiliza useCallback, ésta función nos sirve para realizar una petición a la api que nos devuelve los participantes con sus estados de una sesión concreta.
 
-* fetchQuestion(collectionId, questionId): devuelve la respuesta a la llamada a la api que nos devuelve los datos de una pregunta de una colección en concreto.
+* fetchQuestion(collectionId, questionId): devuelve la respuesta a la llamada a la api que nos devuelve los datos de una pregunta de una colección en concreto. Con los datos que nos devuelve la llamada fijamos la pregunta.
 
-* handlequestionChange(), asociado al evento onChange del select de las preguntas. Primero vacía la lista de las respuestas de la anterior pregunta, después fija el id de la pregunta a la sesión actual. Por último realizamos una llamada a fetchquestion(), con la respuesta de la misma fijaremos al pregunta activa y enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta.
+* handlequestionChange(), asociado al evento onChange del select de las preguntas. Primero vacía la lista de las respuestas de la anterior pregunta, después fija el id de la pregunta a la sesión actual. Por último realizamos una llamada a fetchquestion().
 
 * handleCollectionChange(), asociado al evento onChange del select de las colecciones. Primero vacía la lista de las respuestas de la anterior pregunta, después fija el id de la colección al valor del elemento que ha generado el evento. También fija la pregunta a la primera pregunta de la colección seleccionada. Por último realizamos una llamada a fetchquestion(), con la respuesta de la misma fijaremos al pregunta activa y enviaremos un mensaje de control de tipo setup con el id de la colección y el id de la pregunta.
 
@@ -234,3 +237,11 @@ En el caso de que no sea la primera llamada a la función, nos saltamos los dos 
 * downloadLastFolder(), asociado al evento onClick del botón de Download last log. Realiza una petición a la API para instalar el último log de la lista de logs y descarga el .zip asociado a dicho log.
 
 * downloadAllLogs(), asociado al evento onClick del botón de Download all logs. Realiza una petición a la API para instalar todos los logs y descarga el .zip que contiene todos los logs.
+
+* downloadAllTrajectories(), asociado al evento onClick del botón Download all trajectories. Realiza una petición a la API que nos permite descargar todas las trayectorias que hayamos generado.
+
+* deleteTrajectories(), asociado al evento onClick del botón Delete all trajectories. Realiza una petición a la API que borra todas las trayectorias generadas y sus logs asociados. Solicita una confirmación por parte del usuario. En caso de que todo haya ido bien se mostrará un mensaje de confirmación.
+
+* deleteLogs(), asociado al evento onClick del botón Delete all logs. Realiza una petición a la API que borra todos los logs generados. Solicita doble confirmación. Si todo va bien debería mostrar un mensaje de confirmación.
+
+* handleCheckboxChange(), asociado al evento handleCheckboxChange del input Save Trajectories. La función permite cambiar el modo en el que está la aplicación (Normal o Trajectories).
