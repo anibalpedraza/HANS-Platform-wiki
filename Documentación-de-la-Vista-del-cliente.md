@@ -237,3 +237,11 @@ En el caso de que no sea la primera llamada a la función, nos saltamos los dos 
 * downloadLastFolder(), asociado al evento onClick del botón de Download last log. Realiza una petición a la API para instalar el último log de la lista de logs y descarga el .zip asociado a dicho log.
 
 * downloadAllLogs(), asociado al evento onClick del botón de Download all logs. Realiza una petición a la API para instalar todos los logs y descarga el .zip que contiene todos los logs.
+
+* downloadAllTrajectories(), asociado al evento onClick del botón Download all trajectories. Realiza una petición a la API que nos permite descargar todas las trayectorias que hayamos generado.
+
+* deleteTrajectories(), asociado al evento onClick del botón Delete all trajectories. Realiza una petición a la API que borra todas las trayectorias generadas y sus logs asociados. Solicita una confirmación por parte del usuario. En caso de que todo haya ido bien se mostrará un mensaje de confirmación.
+
+* deleteLogs(), asociado al evento onClick del botón Delete all logs. Realiza una petición a la API que borra todos los logs generados. Solicita doble confirmación. Si todo va bien debería mostrar un mensaje de confirmación.
+
+* handleCheckboxChange(), asociado al evento handleCheckboxChange del input Save Trajectories. La función permite cambiar el modo en el que está la aplicación (Normal o Trajectories).
