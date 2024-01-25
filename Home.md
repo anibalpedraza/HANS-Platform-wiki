@@ -1,1 +1,1 @@
-Welcome to the HANS-Platform wiki!
+Welcome to the HANS-Platform wiki from VISILAB group!
