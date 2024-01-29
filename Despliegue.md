@@ -137,3 +137,8 @@ Para que los cambios que hayamos hecho en nuestro repositorio surjan efecto tend
 2. Parar el servicio (sudo systemctl stop lanzamiento) e iniciar el servicio (sudo systemctl start lanzamiento) entrando a la instancia.
 
 Si hubiera problemas con la sincronización de los repositorios, podríamos correr manualmente el script collectionsSync. Esto debería de solucionar el problema.
+
+## Estructura de carpetas en la instancia
+* Carpeta Hans-Platform-Frontend: carpeta que se sincronizará con el repositorio.
+* Carpeta Hans-Platform-Frontend-App: carpeta que contiene el código que se muestra en nuestra aplicación, es decir el código que se lanza.
+* Carpeta Hans-Platform-Backend: en el caso del back esta carpeta se sincroniza con el repositorio y también contiene el código que se lanza.
