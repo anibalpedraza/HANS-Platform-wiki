@@ -95,23 +95,24 @@ Dicho servicio ejecuta el script start_app.sh. Este spript lo primero que hace e
 
 El script de collectionsSync tiene este aspecto:
 ```sh
+
 #!/bin/bash
 
 git config --add safe.directory /home/ubuntu/Hans-Platform-BackEnd
 # Cambia al directorio del repositorio
-cd "/home/ubuntu/Copia-Frontend/Hans-Platform-FrontEnd" || exit
+cd "/home/ubuntu/Hans-Platform-FrontEnd" || exit
 
-git checkout Dev
+git checkout main
 # Realiza git pull para traer los cambios
 git pull
 
 cd
 
-sudo rsync -av --delete /home/ubuntu/Copia-Frontend/Hans-Platform-FrontEnd/src/* /home/ubuntu/Hans-Platform-FrontEnd/src
-sudo rsync -av --delete /home/ubuntu/Copia-Frontend/Hans-Platform-FrontEnd/package* /home/ubuntu/Hans-Platform-FrontEnd
+sudo rsync -av --delete /home/ubuntu/Hans-Platform-FrontEnd/src/* /home/ubuntu/Hans-Platform-FrontEnd-App/src
+sudo rsync -av --delete /home/ubuntu/Hans-Platform-FrontEnd/package* /home/ubuntu/Hans-Platform-FrontEnd-App
 
 cd "/home/ubuntu/Hans-Platform-BackEnd"
-git checkout Dev
+git checkout main
 
 git pull
 
@@ -119,16 +120,20 @@ git pull
 
 El script que lanza los servidores de backend y frontend (start_app.sh) tiene este aspecto:
 ```sh
+
 #!/bin/bash
 /home/ubuntu/collectionsSync.sh
-cd /home/ubuntu/Hans-Platform-FrontEnd
+cd /home/ubuntu/Hans-Platform-FrontEnd-App
 sudo npm start &
 sleep 5
 cd /home/ubuntu/Hans-Platform-BackEnd/server
 source backenv/bin/activate
 python -m src.main
 
+
 ```
 Para que los cambios que hayamos hecho en nuestro repositorio surjan efecto tendremos dos opciones: 
 1. Detener e iniciar la instancia.
-2. Parar el servicio (sudo systemctl stop lanzamiento) e iniciar el servicio (sudo systemctl start lanzamiento).
+2. Parar el servicio (sudo systemctl stop lanzamiento) e iniciar el servicio (sudo systemctl start lanzamiento) entrando a la instancia.
+
+Si hubiera problemas con la sincronización de los repositorios, podríamos correr manualmente el script collectionsSync. Esto debería de solucionar el problema.
