@@ -32,7 +32,15 @@ Métodos o funciones:
 2. as_dict(), retornará el valor de los atributos id, prompt y answers.
 3. from_folder(), nos servirá para generar un objeto Question a partir de la dirección de una carpeta en la que deberemos tener la información referente a una pregunta. Lo primero que haremos es comprobar que exista tal archivo y abrir un buffer de lectura a éste. Almacenaremos los datos en una variable suponiendo que la información que contiene el buffer se encuentra en formato JSON. Tras esto pasamos a buscar dentro de esta información la dirección de la imagen de la pregunta. Por último retornamos un objeto Question con los valores cargados del archivo y con su id asociado.
 ## position_format_utils (PositionCodec, PositionRecord y TrajectoryPoint)
-Estas clases nos sirven para sacar la trayectorias de una sesión.
+Estas clases nos sirven para sacar la trayectorias de una sesión. Empezaremos con PositionCodec:
+PositionCodec permite transformar el formato que acepta el servidor (podemos ver el formato en /debug) al formato absoluto de una posición y viceversa.
+PositionRecord permite leer una posición a partir de una fila del csv.
+TrajectoryPoint permite pasar la posición en absoluto junto a su timestamp para meter esta información en una línea de texto que irá a nuestro txt.
+Funciones fuera de estas clases:
+* transform_to_trajectory_points(): permite sacar el timestamp y la posición en absoluto a partir de un listado con las posiciones en el formato de la aplicación. Se apoya en TrajectoryPoint.
+* create_trajectory_file(): permite crear un archivo con extensión txt que se llamará como el nombre del log.csv del que vamos a leer. Después lee línea a línea y gracias a PositionRecord y transform_to_trajectory_points permite escribir las líneas correspondientes a cada posición en el archivo creado.
+* calculate_answer_points(): permite calcular las posiciones en las que se encuentran las respuestas.
+* convert_trajectory_files(): primero crea un PositionCodec con el apoyo de calculate_answer_points(). Partiendo de la dirección del log llamamos a create_trajectory_file().
 ## Session
 Se apoya de MQTTClient y Participant.
 ### Objeto SessionCommunicator
